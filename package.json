@@ -1,0 +1,29 @@
+{
+  "name": "financia",
+  "version": "1.0.0",
+  "description": "FinancIA: Aplicativo inteligente para gestão financeira. Extrai automaticamente dados de prints de extratos bancários usando a inteligência artificial do Google Gemini. Desenvolvido com Node.js, Angular e MongoDB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SergioS0ares/FinancIA.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/SergioS0ares/FinancIA/issues"
+  },
+  "homepage": "https://github.com/SergioS0ares/FinancIA#readme",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.2.4",
+    "multer": "^2.1.1"
+  }
+}
