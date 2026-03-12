@@ -1,0 +1,33 @@
+<main class="login-layout">
+  <div class="layout-bg" aria-hidden="true"></div>
+  <div class="theme-toggle" aria-label="Alternar tema">
+    <span class="theme-label">Tema:</span>
+    <button type="button" class="toggle-pill" [class.dark]="isDark" (click)="toggleTheme()">
+      <span class="pill-label light" title="Tema claro"><mat-icon>light_mode</mat-icon> Claro</span>
+      <span class="pill-label dark" title="Tema escuro"><mat-icon>dark_mode</mat-icon> Escuro</span>
+    </button>
+  </div>
+  <div class="form-area">
+    <div class="content">
+      <ng-content></ng-content>
+    </div>
+    <div class="action-buttons" *ngIf="primaryBtnText || secondaryBtnText">
+      <button
+        type="button"
+        (click)="onPrimaryClick()"
+        class="primary-btn btn-primary-page"
+        [disabled]="disablePrimaryBtn || primaryBtnLoading"
+        *ngIf="primaryBtnText">
+        <span *ngIf="primaryBtnLoading" class="spinner-dot"></span>
+        <span>{{ primaryBtnText }}</span>
+      </button>
+      <button
+        type="button"
+        (click)="onSecondaryClick()"
+        class="secondary-btn secondary-btn-outline"
+        *ngIf="secondaryBtnText">
+        {{ secondaryBtnText }}
+      </button>
+    </div>
+  </div>
+</main>

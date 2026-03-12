@@ -1,0 +1,105 @@
+
+<!-- Ocultando botões do layout padrão e removendo título duplicado -->
+<app-default-login-layout>
+  <div class="verificacao-email-content">
+    <!-- Ícone principal com animação mais elegante -->
+    <div class="main-icon">
+      <div class="icon-container" [class.pulse]="emailEnviado">
+        <mat-icon>mail</mat-icon>
+        <div class="success-indicator" *ngIf="emailEnviado">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- Título e descrição mais profissionais -->
+    <div class="header-content">
+      <h1 class="title">Verifique seu e-mail</h1>
+      <p class="subtitle">Falta apenas um passo para completar seu cadastro</p>
+    </div>
+
+    <!-- Informações do email com melhor hierarquia visual -->
+    <div class="email-info">
+      <p class="description">
+        Enviamos um link de verificação para:
+      </p>
+      <div class="email-display">
+        <mat-icon class="small">mail</mat-icon>
+        <span class="email-address">{{ emailUsuario }}</span>
+      </div>
+      <p class="instruction">
+        Clique no link do e-mail para ativar sua conta. Não esqueça de verificar sua pasta de spam.
+      </p>
+    </div>
+
+    <!-- Ilustração visual mais elegante -->
+    <div class="email-illustration">
+      <div class="email-steps">
+        <div class="step completed">
+          <div class="step-icon">
+            <mat-icon class="small">person_add</mat-icon>
+          </div>
+          <span>Cadastro</span>
+        </div>
+        <div class="step-line completed"></div>
+        <div class="step active">
+          <div class="step-icon">
+            <mat-icon class="small">mail</mat-icon>
+          </div>
+          <span>Verificação</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-icon">
+            <mat-icon class="small">check_circle</mat-icon>
+          </div>
+          <span>Ativação</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ações com melhor design e feedback -->
+    <div class="actions">
+      <button 
+        [disabled]="reenviarDisabilitado"
+        (click)="reenviarEmail()"
+        class="primary-action">
+        <span *ngIf="!reenviarDisabilitado && !isLoading">
+          <mat-icon class="small">refresh</mat-icon>
+          Reenviar E-mail
+        </span>
+        <span *ngIf="reenviarDisabilitado && !isLoading">
+          <mat-icon class="small">schedule</mat-icon>
+          Aguarde {{ tempoRestante }}s
+        </span>
+      </button>
+
+      <button 
+        (click)="irParaConfirmacao()"
+        class="secondary-action">
+        <mat-icon class="small">key</mat-icon>
+        Já tenho o código
+      </button>
+    </div>
+
+    <!-- Seção de ajuda mais organizada -->
+    <div class="help-section">
+      <div class="help-item">
+        <mat-icon class="small">help</mat-icon>
+        <span>Não recebeu o e-mail?</span>
+      </div>
+      <ul class="help-list">
+        <li>Verifique sua pasta de spam ou lixo eletrônico</li>
+        <li>Aguarde alguns minutos, pode haver atraso na entrega</li>
+        <li>Certifique-se de que o endereço está correto</li>
+      </ul>
+      
+      <button 
+        (click)="voltarLogin()"
+        class="back-link">
+        <mat-icon class="small">arrow_back</mat-icon>
+        Voltar ao login
+      </button>
+    </div>
+  </div>
+</app-default-login-layout>  

@@ -23,6 +23,13 @@ class UserCreate(UserBase):
     password: str = Field(..., min_length=6, description="Senha do usuário")
 
 
+class UserLogin(BaseModel):
+    """O que o Angular envia quando o usuário tenta logar."""
+
+    email: EmailStr
+    password: str
+
+
 class UserInDB(UserBase):
     """O formato exato de como o usuário será salvo no cofre do MongoDB."""
 
@@ -59,4 +66,10 @@ class TokenData(BaseModel):
     """Os dados que ficam escondidos dentro do código do JWT."""
 
     email: Optional[str] = None
+
+
+class TokenGoogle(BaseModel):
+    """O que o Angular envia quando o usuário clica no botão do Google."""
+
+    token: str
 

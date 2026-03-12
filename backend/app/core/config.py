@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     )
     REFRESH_TOKEN_EXPIRE_DAYS: int = Field(7, env="REFRESH_TOKEN_EXPIRE_DAYS")
 
+    # Chave do Google para Login
+    GOOGLE_CLIENT_ID: str = Field("seu_id_aqui", env="GOOGLE_CLIENT_ID")
+
     class Config:
         env_file = ".env"
         case_sensitive = False

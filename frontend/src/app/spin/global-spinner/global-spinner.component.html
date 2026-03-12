@@ -1,0 +1,22 @@
+@if (visivel) {
+  <div class="spinner-overlay" [class.fast]="fastMode" [class.dark]="darkTheme">
+    <div class="spinner-box">
+      @switch (spinnerType) {
+        @case ('dots') {
+          <div class="spinner-dots">
+            <span></span><span></span><span></span>
+          </div>
+        }
+        @case ('custom') {
+          <ng-content></ng-content>
+        }
+        @default {
+          <div class="spinner-circle"></div>
+        }
+      }
+      @if (message) {
+        <p class="spinner-message">{{ message }}</p>
+      }
+    </div>
+  </div>
+}

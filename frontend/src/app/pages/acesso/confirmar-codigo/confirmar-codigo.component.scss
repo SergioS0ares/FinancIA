@@ -1,0 +1,76 @@
+@use '../../../../styles/variables' as *;
+
+.codigo-content {
+  text-align: center;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 28px 24px 2rem;
+}
+
+.header-icon {
+  margin-bottom: 2rem;
+  i { font-size: 2.5rem; color: var(--primary); }
+}
+
+.content-header {
+  margin-bottom: 2rem;
+  .main-title { color: var(--primary); font-size: 1.35rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .description { color: var(--text-secondary); font-size: 1rem; margin: 0; strong { color: var(--primary); } }
+}
+
+.codigo-inputs-wrapper {
+  margin: 2rem 0;
+  padding: 1.25rem;
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface-elevated);
+  border: 2px solid var(--border);
+  transition: border-color 0.3s, background 0.3s;
+  &.success { border-color: var(--success); background: rgba(82, 196, 26, 0.08); }
+  &.error { border-color: var(--danger); background: rgba(209, 73, 91, 0.08); animation: shake 0.5s ease-in-out; }
+}
+
+::ng-deep .ant-input-otp { gap: 0.5rem; display: flex; justify-content: center; }
+::ng-deep .ant-input-otp-input {
+  width: 48px !important; height: 56px !important; min-width: 48px !important; min-height: 56px !important;
+  font-size: 1.5rem !important; font-weight: 700 !important;
+  border: 2px solid var(--border-strong) !important; border-radius: var(--radius) !important;
+  background: var(--bg-surface) !important; color: var(--text-primary) !important;
+  text-align: center !important;
+  &:focus, &.ant-input-otp-input-active { border-color: var(--primary) !important; box-shadow: 0 0 0 2px rgba(246, 189, 56, 0.2) !important; }
+}
+
+.status-feedback {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  background: var(--bg-surface-elevated);
+  border-left: 4px solid var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  .status-icon.success { color: var(--success); }
+  .status-icon.error { color: var(--danger); }
+  .status-icon.info { color: var(--primary); }
+  .status-text { margin: 0; font-size: 0.9rem; }
+}
+
+.help-section {
+  margin-top: 1.5rem;
+  .resend-btn { color: var(--primary) !important; border: none !important; background: none !important; cursor: pointer; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+@media (max-width: 768px) {
+  .content-header .main-title { font-size: 1.2rem; }
+  ::ng-deep .ant-input-otp-input { width: 40px !important; height: 48px !important; min-width: 40px !important; min-height: 48px !important; font-size: 1.25rem !important; }
+}
+
+@media (max-width: 480px) {
+  ::ng-deep .ant-input-otp-input { width: 36px !important; height: 44px !important; min-width: 36px !important; min-height: 44px !important; font-size: 1.1rem !important; }
+}

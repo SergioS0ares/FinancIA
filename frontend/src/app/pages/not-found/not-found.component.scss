@@ -1,0 +1,90 @@
+/* 404 page – fundo único #ebe8e2 em tudo, conteúdo centralizado na vertical */
+.page_404 {
+  padding: 40px 20px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff !important;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--text-primary);
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+}
+
+.content.text-center {
+  text-align: center;
+  background: #ffffff;
+}
+
+/* Número 404 acima do “cara tomando choque” */
+.code_404 {
+  font-size: 80px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--text-primary);
+
+  @media (max-width: 480px) {
+    font-size: 56px;
+  }
+}
+
+/* Área da ilustração: mesmo fundo da página (sem branco) */
+.four_zero_four_bg {
+  background-color: #ffffff !important;
+  background-image: url('https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif');
+  height: 400px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.contant_box_404 {
+  margin-top: -50px;
+  background: #ffffff;
+}
+
+/* Título e texto em marrom (igual login/cadastro) */
+.title_404 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--text-primary);
+
+  @media (max-width: 480px) {
+    font-size: 1.25rem;
+  }
+}
+
+.text_404 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0 0 20px;
+}
+
+/* Botão amarelo, mesma fonte dos outros botões (padrão do app) */
+.link_404.btn-primary-page {
+  width: auto;
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 20px 0;
+
+  &:hover {
+    background: var(--primary-hover);
+  }
+}
