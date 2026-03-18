@@ -1,5 +1,7 @@
 import os
 import logging
+
+import certifi
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
 
@@ -28,7 +30,12 @@ async def connect_to_mongo():
     """Função que liga o banco de dados"""
     logging.info("⏳ Conectando ao MongoDB Atlas...")
     try:
-        db_instance.client = AsyncIOMotorClient(MONGODB_URI)
+        # Usa o bundle de CAs do certifi para evitar erros de SSL no Windows/Python
+        db_instance.client = AsyncIOMotorClient(
+            MONGODB_URI,
+            tls=True,
+            tlsCAFile=certifi.where(),
+        )
         db_instance.db = db_instance.client[DATABASE_NAME]
 
         # O "ping" força o banco a responder, confirmando que a senha está certa

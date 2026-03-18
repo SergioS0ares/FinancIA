@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
-import { ConfirmarCodigoComponent } from './pages/acesso/confirmar-codigo/confirmar-codigo.component';
-import { RedefinirSenhaComponent } from './pages/acesso/redefinir-senha/redefinir-senha.component';
 
 export const routes: Routes = [
   {
@@ -13,6 +11,10 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./pages/acesso/login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'login/callback',
+    loadComponent: () => import('./pages/acesso/auth-callback/auth-callback.component').then(m => m.AuthCallbackComponent)
   },
   {
     path: 'signup',
@@ -26,18 +28,17 @@ export const routes: Routes = [
   // },
   {
     path: 'confirmar-codigo/:id',
-    loadComponent: () => ConfirmarCodigoComponent
+    loadComponent: () => import('./pages/acesso/confirmar-codigo/confirmar-codigo.component').then(m => m.ConfirmarCodigoComponent)
   },
   {
     path: 'redefinir-senha/:token',
-    loadComponent: () => RedefinirSenhaComponent
+    loadComponent: () => import('./pages/acesso/redefinir-senha/redefinir-senha.component').then(m => m.RedefinirSenhaComponent)
   },
   {
     // Layout principal protegido por autenticação e papel do usuário
     path: 'app',
     loadComponent: () => import('./pages/layout-principal/layout-principal.component').then(m => m.LayoutPrincipalComponent),
-    canActivate: [AuthGuard, roleGuard],
-    data: { roles: ['CLIENTE', 'RESTAURANTE', 'FUNCIONARIO'] }
+    canActivate: [AuthGuard]
   },
   {
     path: '404',

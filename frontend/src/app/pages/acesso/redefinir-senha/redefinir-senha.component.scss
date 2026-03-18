@@ -53,22 +53,28 @@ mat-error {
 }
 
 @media (max-width: 600px) {
-    .reset-form {
-        max-width: 100%;
-        padding: 0 8px;
-    }
-    
-    .form-section {
-        padding: 24px 16px;
-    }
-    
-    .status-card {
-        padding: 24px 16px;
-        
-        mat-icon {
-            font-size: 40px;
-            width: 40px;
-            height: 40px;
-        }
-    }
+  .form-section {
+    padding: 20px 16px;
+    max-width: 100%;
+  }
+  .reset-form {
+    max-width: 100%;
+    padding: 0 4px;
+  }
+  .reset-form mat-form-field {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .form-section {
+    padding: 16px 12px;
+  }
+}
+
+// Remove o "olho" preto nativo do Edge/Chrome em campos de senha,
+// deixando visível apenas o ícone cinza customizado (mat-icon).
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
 }

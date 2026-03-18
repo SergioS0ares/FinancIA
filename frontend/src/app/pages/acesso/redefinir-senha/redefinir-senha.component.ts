@@ -5,6 +5,7 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validatio
 import { ToastrService } from 'ngx-toastr';
 import { AcessService } from '../../../core/services/access.service';
 import { DefaultLoginLayoutComponent } from '../default-login-layout/default-login-layout.component';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 // Imports do Angular Material e NG-Zorro (similares ao seu login)
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -115,10 +116,8 @@ export class RedefinirSenhaComponent implements OnInit {
         this.router.navigate(['/login']);
       },
       error: (err: any) => {
-        console.error('Erro na redefinição:', err);
         this.isLoading = false;
-        const errorMessage = err.error?.erro || err.error?.message || "Não foi possível redefinir sua senha. Tente solicitar um novo link.";
-        this.toastService.error(errorMessage, "Erro");
+        this.toastService.error(getApiErrorMessage(err, 'Não foi possível redefinir sua senha. Tente solicitar um novo link.'), 'Erro');
       }
     });
   }

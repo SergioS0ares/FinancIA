@@ -1,0 +1,38 @@
+// ============================================================
+// Botões globais — cor principal AMARELO, hovers com gradiente
+// ============================================================
+// Importado em styles.scss junto com _theme.scss
+
+// ---- Hover global: brilho amarelo em todos os botões ----
+button:not([disabled]):hover,
+.mat-mdc-button:not([disabled]):hover,
+.mat-mdc-raised-button:not([disabled]):hover,
+.mat-mdc-outlined-button:not([disabled]):hover,
+.mat-mdc-unelevated-button:not([disabled]):hover,
+.btn-primary-page:hover:not(:disabled),
+.btn-primary-soft:hover:not(:disabled),
+.primary-action:hover:not(:disabled),
+.secondary-btn:hover,
+.secondary-action:hover,
+.primary-btn:hover:not(:disabled) {
+  // Reforço visual com brilho amarelo no hover (quando não for botão primário já amarelo)
+  box-shadow: 0 4px 16px rgba(246, 189, 56, 0.35);
+}
+
+// Botões primários (Entrar, Cadastrar): hover com gradiente amarelo mais forte
+.btn-primary-page:hover:not(:disabled),
+.btn-primary-soft:hover:not(:disabled),
+.primary-action:hover:not(:disabled),
+.primary-btn:hover:not(:disabled),
+.mat-mdc-raised-button.btn-primary-page:hover:not(:disabled) {
+  box-shadow: 0 6px 24px rgba(246, 189, 56, 0.5);
+}
+
+// Botões secundários / outlined: hover com fundo amarelo suave
+.secondary-btn:hover,
+.secondary-action:hover,
+.mat-mdc-outlined-button.social:hover {
+  background: rgba(246, 189, 56, 0.12) !important;
+  border-color: var(--yellow-main) !important;
+  box-shadow: 0 2px 12px rgba(246, 189, 56, 0.25);
+}

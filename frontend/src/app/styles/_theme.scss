@@ -1,69 +1,274 @@
-// Tema global – estilo imagem 1 (card arredondado, botão gradiente, claro/escuro)
+// Tema global: branco + amarelo/marrom (claro), escuro criativo
+// Usado em todas as páginas via CSS variables
 
 :root {
-  // Página e superfícies
-  --bg-page: #faf9f7;
+  // Paleta principal
+  --yellow-main: #f6bd38;
+  --yellow-soft: #ffe9b0;
+  --yellow-deep: #e5ab2a;
+  --brown-main: #3b221b;
+  --brown-soft: #5b372c;
+
+  // Página e superfícies — fundo branco com toques mínimos
+  --bg-page: #ffffff;
+  --bg-page-alt: #fafafa;
   --bg-surface: #ffffff;
   --bg-surface-elevated: #ffffff;
-  --bg-gradient-start: rgba(255, 236, 179, 0.4);
-  --bg-gradient-end: transparent;
+
+  // Decoração minimalista (sem amarelo forte no fundo)
+  --bg-gradient-start: rgba(246, 189, 56, 0.06);
+  --bg-gradient-end: rgba(59, 34, 27, 0.04);
 
   // Texto
-  --text-primary: #1a1a1a;
-  --text-secondary: #5c5c5c;
-  --text-muted: #888888;
+  --text-primary: #1f1512;
+  --text-secondary: #5c4a42;
+  --text-muted: #8a7a72;
 
   // Bordas e raios
-  --border: #e0e0e0;
-  --radius: 8px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --border: #e8e2dc;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
 
   // Sombras
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 1px 3px rgba(31, 21, 18, 0.06);
+  --shadow-md: 0 12px 36px rgba(31, 21, 18, 0.1);
 
-  // Ações
-  --primary: #4caf50;
-  --primary-hover: #43a047;
-  --accent: #1976d2;
-  --accent-hover: #1565c0;
-  --danger: #d32f2f;
+  // Ações (amarelo como cor de destaque, não azul)
+  --primary: var(--yellow-main);
+  --primary-hover: #ffc94d;
+  --accent: var(--yellow-deep);
+  --accent-hover: var(--yellow-main);
+  --danger: #dc2626;
 
-  // Botão principal (gradiente: verde → azul)
-  --btn-primary-from: #81c784;
-  --btn-primary-to: #64b5f6;
+  // Botão principal — amarelo (cor principal do app)
+  --btn-primary-from: #f6bd38;
+  --btn-primary-to: #e5ab2a;
 
-  // Inputs
+  // Inputs (bordas visíveis, foco amarelo)
   --input-bg: #ffffff;
-  --input-border: #e0e0e0;
+  --input-border: #d0ccc7;
+  --input-focus-ring: rgba(246, 189, 56, 0.45);
 }
 
 .theme-dark {
-  --bg-page: #1e1e1e;
-  --bg-surface: #2d2d2d;
-  --bg-surface-elevated: #383838;
+  --bg-page: #0f0f12;
+  --bg-page-alt: #16161c;
+  --bg-surface: #1c1b22;
+  --bg-surface-elevated: #24222c;
+
   --bg-gradient-start: rgba(129, 199, 132, 0.08);
-  --bg-gradient-end: transparent;
+  --bg-gradient-end: rgba(0, 0, 0, 0.4);
 
-  --text-primary: #f5f5f5;
-  --text-secondary: #b0b0b0;
-  --text-muted: #888888;
+  --text-primary: #f0ede8;
+  --text-secondary: #b8b0a6;
+  --text-muted: #7a7268;
 
-  --border: #404040;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --border: #3a3642;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.5);
 
-  --primary: #66bb6a;
-  --primary-hover: #81c784;
-  --accent: #42a5f5;
-  --accent-hover: #64b5f6;
+  --primary: var(--yellow-main);
+  --primary-hover: #ffd54f;
+  --accent: #ffd54f;
+  --accent-hover: var(--yellow-soft);
   --danger: #ef5350;
 
-  // Botão principal modo escuro (gradiente: lime → verde)
-  --btn-primary-from: #aed581;
-  --btn-primary-to: #66bb6a;
+  // Botão principal modo escuro (amarelo/dourado)
+  --btn-primary-from: #ffd54f;
+  --btn-primary-to: #f6bd38;
 
-  --input-bg: #383838;
-  --input-border: #505050;
+  --input-bg: #262331;
+  --input-border: #4a4552;
+  --input-focus-ring: rgba(246, 189, 56, 0.4);
+}
+
+// Utilitários globais para cards e botões
+.card-elevated {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+// Botão principal (Entrar / Cadastrar) — Material + gradiente imagem 2
+.btn-primary-page,
+.btn-primary-soft,
+.primary-action,
+button.btn-primary-page {
+  border-radius: var(--radius-lg) !important;
+  padding: 12px 24px !important;
+  min-height: 48px !important;
+  border: none !important;
+  background: linear-gradient(135deg, var(--btn-primary-from), var(--btn-primary-to)) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(246, 189, 56, 0.45) !important;
+    filter: brightness(1.05);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Override Material raised button quando usa nossa classe
+.mat-mdc-raised-button.btn-primary-page,
+.mat-mdc-unelevated-button.btn-primary-page {
+  --mdc-filled-button-container-color: transparent !important;
+  --mdc-filled-button-label-text-color: #fff !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+// Botões sociais (Google / Facebook) — alinhamento correto, sem “torto”
+.socials {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.social {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  min-height: 48px !important;
+  padding: 12px 20px !important;
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border) !important;
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  line-height: 1.25 !important;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s !important;
+  box-sizing: border-box !important;
+
+  &:hover {
+    background: rgba(246, 189, 56, 0.1) !important;
+    border-color: var(--yellow-main) !important;
+    box-shadow: 0 4px 14px rgba(246, 189, 56, 0.25) !important;
+  }
+
+  .google-icon,
+  .facebook-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  span:last-child {
+    flex-shrink: 0;
+  }
+}
+
+.mat-mdc-outlined-button.social {
+  --mdc-outlined-button-outline-color: var(--border) !important;
+  --mdc-outlined-button-label-text-color: var(--text-primary) !important;
+}
+
+.social.google:hover {
+  border-color: var(--yellow-main) !important;
+}
+
+.social.facebook .facebook-icon {
+  color: #1877f2;
+}
+
+// Links padrão (amarelo, não azul)
+.link-primary {
+  color: var(--yellow-deep);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--yellow-main);
+    text-decoration: underline;
+  }
+}
+
+.theme-dark .link-primary {
+  color: var(--yellow-soft);
+  &:hover { color: var(--yellow-main); }
+}
+
+.link-muted {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+// Botão secundário (contorno) — uso em todas as telas
+.secondary-btn,
+.secondary-action {
+  border-radius: var(--radius-lg);
+  padding: 12px 24px;
+  min-height: 48px;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    background: rgba(246, 189, 56, 0.12);
+    border-color: var(--yellow-main);
+    box-shadow: 0 4px 14px rgba(246, 189, 56, 0.25);
+  }
+}
+
+// Inputs Material mais visíveis (bordas e rótulos com contraste)
+.mat-mdc-form-field {
+  .mdc-notched-outline .mdc-notched-outline__leading,
+  .mdc-notched-outline .mdc-notched-outline__notch,
+  .mdc-notched-outline .mdc-notched-outline__trailing {
+    border-color: var(--input-border) !important;
+  }
+  &.mat-focused .mdc-notched-outline .mdc-notched-outline__leading,
+  &.mat-focused .mdc-notched-outline .mdc-notched-outline__notch,
+  &.mat-focused .mdc-notched-outline .mdc-notched-outline__trailing {
+    border-color: var(--yellow-main) !important;
+    border-width: 2px !important;
+  }
+  .mat-mdc-form-field-focus-overlay {
+    background-color: transparent !important;
+  }
+  .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading,
+  .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__notch,
+  .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing {
+    border-width: 1.5px !important;
+  }
+}
+.mat-mdc-input-element,
+.mat-mdc-form-field-input-control {
+  color: var(--text-primary) !important;
+}
+.mat-mdc-floating-label {
+  color: var(--text-secondary) !important;
+}
+.mat-mdc-form-field.mat-focused .mat-mdc-floating-label.mdc-floating-label--float-above {
+  color: var(--yellow-main) !important;
 }

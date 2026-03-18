@@ -19,15 +19,17 @@ export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<string|null>(null);
 
-  // NOVO: Lista de rotas que NÃO precisam de token de autorização
   private publicRoutes = [
-    '/auth/login',
-    '/auth/register',
-    '/auth/verificar',
-    '/auth/reenviar-codigo',
-    '/auth/refresh',
-    '/auth/redefinir-senha',
-    'auth/mudar-senha/'
+    '/api/auth/login',
+    '/api/auth/registrar',
+    '/api/auth/google',
+    '/api/auth/verificar',
+    '/api/auth/reenviar-codigo',
+    '/api/auth/refresh',
+    '/api/auth/logout',
+    '/api/auth/redefinir-senha',
+    '/api/auth/mudar-senha/',
+    '/api/auth/esqueci-senha'
   ];
 
   constructor(

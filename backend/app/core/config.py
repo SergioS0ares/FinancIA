@@ -26,6 +26,10 @@ class Settings(BaseSettings):
     # Chave do Google para Login
     GOOGLE_CLIENT_ID: str = Field("seu_id_aqui", env="GOOGLE_CLIENT_ID")
 
+    # E-mail (Gmail SMTP)
+    EMAIL_HOST_USER: str = Field("seu_email@gmail.com", env="EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD: str = Field("", env="EMAIL_HOST_PASSWORD")
+
     class Config:
         env_file = ".env"
         case_sensitive = False

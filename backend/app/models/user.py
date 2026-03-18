@@ -73,3 +73,9 @@ class TokenGoogle(BaseModel):
 
     token: str
 
+
+class EsqueciSenhaRequest(BaseModel):
+    """Payload da tela 'Esqueci minha senha'."""
+
+    email: EmailStr
+

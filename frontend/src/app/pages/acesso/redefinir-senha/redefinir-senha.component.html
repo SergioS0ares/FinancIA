@@ -25,8 +25,8 @@
         <mat-form-field appearance="outline">
           <mat-label>Confirme sua senha</mat-label>
           <input matInput formControlName="confirmarSenha" [type]="hideConfirmPassword ? 'password' : 'text'">
-          <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" type="button">
-            <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword">
+            <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           <mat-error *ngIf="resetForm.get('confirmarSenha')?.hasError('required')">
             Este campo é obrigatório
@@ -37,7 +37,7 @@
         </mat-form-field>
         
         <div class="actions">
-          <button type="submit" class="primary-action" [disabled]="!resetForm.valid || isLoading">
+          <button mat-raised-button type="submit" class="btn-primary-page full-width" [disabled]="!resetForm.valid || isLoading">
             <mat-icon *ngIf="!isLoading" class="input-icon">vpn_key</mat-icon>
             <mat-icon *ngIf="isLoading" class="spinning input-icon">refresh</mat-icon>
             {{ isLoading ? 'Redefinindo...' : 'Redefinir Senha' }}

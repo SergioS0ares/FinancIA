@@ -1,10 +1,10 @@
 <main class="login-layout">
   <div class="layout-bg" aria-hidden="true"></div>
   <div class="theme-toggle" aria-label="Alternar tema">
-    <span class="theme-label">Tema:</span>
-    <button type="button" class="toggle-pill" [class.dark]="isDark" (click)="toggleTheme()">
-      <span class="pill-label light" title="Tema claro"><mat-icon>light_mode</mat-icon> Claro</span>
-      <span class="pill-label dark" title="Tema escuro"><mat-icon>dark_mode</mat-icon> Escuro</span>
+    <button type="button" class="theme-switch-track" [attr.aria-pressed]="isDark" (click)="toggleTheme()" title="{{ isDark ? 'Modo claro' : 'Modo escuro' }}">
+      <span class="theme-switch-knob" [class.dark]="isDark"></span>
+      <span class="theme-option" [class.active]="!isDark" aria-hidden="true"><mat-icon>light_mode</mat-icon></span>
+      <span class="theme-option" [class.active]="isDark" aria-hidden="true"><mat-icon>dark_mode</mat-icon></span>
     </button>
   </div>
   <div class="form-area">

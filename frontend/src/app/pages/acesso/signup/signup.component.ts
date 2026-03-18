@@ -17,6 +17,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../environments/environment';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   selector: 'app-signup',
@@ -115,19 +116,17 @@ export class SignUpComponent {
       return;
     }
     const form = this.signupForm.getRawValue();
-    const payload = {
+    this.loginService.postSignup({
       nome: form.name,
       email: form.email,
       password: form.password
-    };
-    this.loginService.postSignup(payload).subscribe({
-      next: (res) => {
+    }).subscribe({
+      next: () => {
         this.toastService.success('Cadastro realizado com sucesso! Você já pode fazer login.');
         this.router.navigate(['/login']);
       },
       error: (err: any) => {
-        const errorMessage = err.error?.erro || err.error?.message || "Erro inesperado! Tente novamente mais tarde";
-        this.toastService.error(errorMessage);
+        this.toastService.error(getApiErrorMessage(err, 'Erro ao cadastrar. Tente novamente.'));
       }
     });
   }

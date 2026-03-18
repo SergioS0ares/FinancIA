@@ -29,8 +29,8 @@
 
 .forgot-row {
   text-align: right;
-  margin-top: -8px;
-  margin-bottom: 4px;
+  margin-top: 4px;
+  margin-bottom: 20px;
 }
 
 .login-error {
@@ -38,10 +38,12 @@
   border-radius: var(--radius);
   text-align: center;
   font-size: 14px;
+  margin-bottom: 12px;
 }
 
-.btn-primary {
-  margin-top: 8px;
+.btn-primary,
+button.btn-primary-page {
+  margin-top: 4px;
 }
 
 .divider {
@@ -52,6 +54,9 @@
 }
 
 @media (max-width: 600px) {
+  .login-card {
+    padding: 0 8px;
+  }
   .logo {
     width: 56px;
     margin-bottom: 12px;
@@ -61,6 +66,21 @@
   }
   .subtitle {
     font-size: 0.9rem;
+  }
+  .login-form .full {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .login-card {
+    padding: 0 4px;
+  }
+  .title {
+    font-size: 1.2rem;
+  }
+  .forgot-row {
+    margin-bottom: 16px;
   }
 }
 

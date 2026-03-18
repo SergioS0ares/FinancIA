@@ -48,6 +48,9 @@
 }
 
 @media (max-width: 600px) {
+  .card-inner {
+    padding: 0 8px;
+  }
   .signup-header .title {
     font-size: 1.35rem;
   }
@@ -58,6 +61,18 @@
     width: 48px;
     height: 48px;
     margin-bottom: 10px;
+  }
+  .signup-form .full-width {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .card-inner {
+    padding: 0 4px;
+  }
+  .signup-header .title {
+    font-size: 1.2rem;
   }
 }
 

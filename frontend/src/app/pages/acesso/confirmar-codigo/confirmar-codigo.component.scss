@@ -71,6 +71,22 @@
   ::ng-deep .ant-input-otp-input { width: 40px !important; height: 48px !important; min-width: 40px !important; min-height: 48px !important; font-size: 1.25rem !important; }
 }
 
+@media (max-width: 600px) {
+  .codigo-content {
+    padding: 20px 16px;
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 480px) {
+  .codigo-content {
+    padding: 16px 12px;
+  }
   ::ng-deep .ant-input-otp-input { width: 36px !important; height: 44px !important; min-width: 36px !important; min-height: 44px !important; font-size: 1.1rem !important; }
+}
+
+@media (max-width: 380px) {
+  .codigo-content {
+    padding: 12px 8px;
+  }
 }

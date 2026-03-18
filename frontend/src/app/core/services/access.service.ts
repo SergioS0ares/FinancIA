@@ -9,71 +9,78 @@ import { LoginResponse, RegisterResponse } from '../../types/login-response.inte
   providedIn: 'root'
 })
 export class AcessService {
-  apiUrl: string = `${environment.apiUrl}/auth`;
+  apiUrl: string = `${environment.apiUrl}/api/auth`;
 
   constructor(private httpClient: HttpClient, private auth: AuthService) {}
 
   /**
-   * POST /auth/login - Login tradicional com e-mail e senha.
+   * POST /auth/login - Login com e-mail e senha.
+   * Backend devolve access_token no JSON e grava refresh_token em cookie HTTP-Only.
    */
   postLogin(email: string, senha: string): Observable<LoginResponse> {
-    // Backend Python espera "password" em vez de "senha"
-    return this.httpClient.post<LoginResponse>(`${this.apiUrl}/login`, { email, password: senha }, { withCredentials: true }).pipe(
-      tap((value: any) => {
-        const token = value.access_token ?? value.token;
-        this.auth.setToken(token);
-        this.auth.setPerfil({
-          tipo: value.tipoUsuario ?? 'CLIENTE',
-          nome: value.nome ?? 'Usuário',
-          id: value.id ?? '',
-          imagem: value.imagem ?? null,
-          restauranteId: value.restauranteId
-        });
-      })
-    );
+    return this.httpClient
+      .post<LoginResponse>(`${this.apiUrl}/login`, { email, password: senha }, { withCredentials: true })
+      .pipe(
+        tap((value: any) => {
+          const token = value.access_token ?? value.token;
+          if (token) this.auth.setToken(token);
+          this.auth.setPerfil({
+            tipo: value.tipoUsuario ?? 'CLIENTE',
+            nome: value.nome ?? 'Usuário',
+            id: value.id ?? '',
+            imagem: value.imagem ?? null,
+            restauranteId: value.restauranteId
+          });
+        })
+      );
   }
 
   /**
    * POST /auth/google - Login com token do Google (idToken).
+   * Backend devolve access_token no JSON e refresh_token em cookie HTTP-Only.
    */
   postLoginWithGoogle(idToken: string): Observable<LoginResponse> {
-    return this.httpClient.post<LoginResponse>(`${this.apiUrl}/google`, { token: idToken }, { withCredentials: true }).pipe(
-      tap((value: any) => {
-        const token = value.access_token ?? value.token;
-        this.auth.setToken(token);
-        this.auth.setPerfil({
-          tipo: value.tipoUsuario ?? 'CLIENTE',
-          nome: value.nome ?? 'Usuário Google',
-          id: value.id ?? '',
-          imagem: value.imagem ?? null,
-          restauranteId: value.restauranteId
-        });
-      })
+    return this.httpClient
+      .post<LoginResponse>(`${this.apiUrl}/google`, { token: idToken }, { withCredentials: true })
+      .pipe(
+        tap((value: any) => {
+          const token = value.access_token ?? value.token;
+          if (token) this.auth.setToken(token);
+          this.auth.setPerfil({
+            tipo: value.tipoUsuario ?? 'CLIENTE',
+            nome: value.nome ?? 'Usuário Google',
+            id: value.id ?? '',
+            imagem: value.imagem ?? null,
+            restauranteId: value.restauranteId
+          });
+        })
+      );
+  }
+
+  /**
+   * POST /auth/registrar - Cadastro (backend Python: email, nome, password).
+   */
+  postSignup(data: { email: string; nome: string; password: string }): Observable<RegisterResponse> {
+    return this.httpClient.post<RegisterResponse>(
+      `${this.apiUrl}/registrar`,
+      { email: data.email, nome: data.nome, password: data.password },
+      { withCredentials: true }
     );
   }
 
   /**
-   * POST /auth/registrar - Cadastro de conta.
+   * POST /auth/refresh — O refresh_token vai no cookie HTTP-Only (withCredentials: true).
+   * O backend devolve apenas { access_token, token_type }; não envia perfil.
    */
-  postSignup(data: any): Observable<RegisterResponse> {
-    return this.httpClient.post<RegisterResponse>(`${this.apiUrl}/registrar`, data, { withCredentials: true });
-  }
-
   postRefreshToken(): Observable<LoginResponse> {
-    console.log('[LoginService] calling /auth/refresh');
     return this.httpClient
       .post<LoginResponse>(`${this.apiUrl}/refresh`, {}, { withCredentials: true })
       .pipe(
         tap(res => {
-          console.log('[LoginService] refresh response received:', res);
-          this.auth.setToken(res.token);
-          this.auth.setPerfil({
-            tipo: res.tipoUsuario,
-            nome: res.nome,
-            imagem: res.imagem,
-            id: res.id,
-            restauranteId: res.restauranteId
-          });
+          const token = (res as any).access_token ?? (res as any).token;
+          if (token) {
+            this.auth.setToken(token);
+          }
         })
       );
   }
@@ -92,14 +99,15 @@ export class AcessService {
       codigo,
       mantenhaMeConectado
     }, { withCredentials: true }).pipe(
-      tap((value) => {
-        if (value.token) {
-          this.auth.setToken(value.token);
+      tap((value: any) => {
+        const token = value.access_token ?? value.token;
+        if (token) {
+          this.auth.setToken(token);
           this.auth.setPerfil({
-            tipo: value.tipoUsuario,
-            nome: value.nome,
-            id: value.id,
-            imagem: value.imagem,
+            tipo: value.tipoUsuario ?? 'CLIENTE',
+            nome: value.nome ?? 'Usuário',
+            id: value.id ?? '',
+            imagem: value.imagem ?? null,
             restauranteId: value.restauranteId
           });
         }

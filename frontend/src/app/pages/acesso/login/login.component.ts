@@ -1,6 +1,6 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { DefaultLoginLayoutComponent } from '../default-login-layout/default-login-layout.component';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AcessService } from '../../../core/services/access.service';
 import { ToastrService } from 'ngx-toastr';
@@ -11,8 +11,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { ILoginForm } from '../../../Interfaces/ILoginForm.interface';
 import { AuthService } from '../../../core/services/auth.service';
-import { SocialAuthService, GoogleLoginProvider, SocialUser } from '@abacritt/angularx-social-login';
-import { Subscription } from 'rxjs';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
+import { environment } from '../../../environments/environment';
+
+declare const google: any;
 
 @Component({
   selector: 'app-login',
@@ -29,7 +31,8 @@ import { Subscription } from 'rxjs';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
+  @ViewChild('googleButton', { static: true }) googleButton!: ElementRef;
   loginForm: FormGroup<ILoginForm>;
   showLoginError = false;
   hidePassword = true;
@@ -38,8 +41,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   private loginService = inject(AcessService);
   private toastService = inject(ToastrService);
   private authService = inject(AuthService);
-  private socialAuthService = inject(SocialAuthService, { optional: true });
-  private googleAuthSub: Subscription | null = null;
 
   constructor() {
     this.loginForm = new FormGroup<ILoginForm>({
@@ -61,22 +62,26 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.loginService.postLogin(email, senha).subscribe({
         next: (res: any) => {
           this.showLoginError = false;
-
           if (res.idVerificacao) {
             this.toastService.info(res.mensagem || 'Código de verificação enviado para seu e-mail.');
             this.router.navigate(['/confirmar-codigo', res.idVerificacao]);
             return;
           }
-
           this.toastService.success('Login feito com sucesso!');
-          const token = (res as any).access_token ?? (res as any).token;
-          this.authService.setAuthData(token, res.nome, res.tipoUsuario, res.id, res.imagem, res.restauranteId);
+          const token = res.access_token ?? res.token;
+          this.authService.setAuthData(
+            token,
+            res.nome ?? 'Usuário',
+            res.tipoUsuario ?? 'CLIENTE',
+            res.id,
+            res.imagem,
+            res.restauranteId
+          );
           this.router.navigate(['app']);
         },
         error: (err: any) => {
           this.showLoginError = true;
-          const errorMessage = err.error?.erro || err.error?.message || 'Não foi possível acessar sua conta. Verifique seu e-mail e senha e tente novamente.';
-          this.toastService.error(errorMessage);
+          this.toastService.error(getApiErrorMessage(err, 'Não foi possível acessar sua conta. Verifique seu e-mail e senha.'));
         }
       });
     } else {
@@ -86,37 +91,20 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.socialAuthService) {
-      this.googleAuthSub = this.socialAuthService.authState.subscribe((user: SocialUser | null) => {
-        if (user?.idToken) {
-          this.loginService.postLoginWithGoogle(user.idToken).subscribe({
-            next: (res) => {
-              this.showLoginError = false;
-              this.toastService.success('Login feito com sucesso!');
-              const token = (res as any).access_token ?? (res as any).token;
-              this.authService.setAuthData(token, res.nome, res.tipoUsuario, res.id, res.imagem, res.restauranteId);
-              this.router.navigate(['app']);
-            },
-            error: (err) => {
-              this.showLoginError = true;
-              const msg = err.error?.erro || err.error?.message || 'Não foi possível entrar com o Google. Tente novamente.';
-              this.toastService.error(msg);
-            }
-          });
-        }
+    if (typeof google !== 'undefined') {
+      google.accounts.id.initialize({
+        client_id: environment.googleClientId,
+        ux_mode: 'redirect',
+        login_uri: 'http://localhost:8000/api/auth/google/callback'
       });
-    }
-  }
 
-  ngOnDestroy(): void {
-    this.googleAuthSub?.unsubscribe();
-  }
-
-  signInWithGoogle(): void {
-    if (this.socialAuthService) {
-      this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+      google.accounts.id.renderButton(this.googleButton.nativeElement, {
+        theme: 'outline',
+        size: 'large',
+        width: '100%'
+      });
     } else {
-      this.toastService.warning('Login com Google não disponível. Verifique a configuração da origem no Google Cloud Console.');
+      console.error('Google Identity Services script não carregado.');
     }
   }
 
@@ -127,6 +115,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (!email) { this.toastService.warning('Por favor, digite seu e-mail antes de solicitar a redefinição de senha.'); return; }
     if (this.loginForm.get('email')?.invalid) { this.toastService.warning('Por favor, digite um e-mail válido.'); return; }
 
-    this.loginService.postEsqueciMinhaSenha(email).subscribe({ next: () => this.toastService.success('Instruções para redefinição de senha foram enviadas para seu e-mail!'), error: (err) => this.toastService.error(err.error?.erro || err.error?.message || 'Erro ao enviar e-mail de redefinição. Tente novamente.') });
+    this.loginService.postEsqueciMinhaSenha(email).subscribe({
+      next: () => this.toastService.success('Instruções para redefinição de senha foram enviadas para seu e-mail!'),
+      error: (err) => this.toastService.error(getApiErrorMessage(err, 'Erro ao enviar e-mail de redefinição. Tente novamente.'))
+    });
   }
 }

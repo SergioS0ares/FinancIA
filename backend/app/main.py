@@ -18,10 +18,12 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="FinancIA Backend", version="1.0.0", lifespan=lifespan)
 
+# CORS: obrigatório para o cookie HTTP-Only (refresh_token) funcionar com o Angular.
+# allow_origins NÃO pode ser ["*"] quando allow_credentials=True (o navegador bloqueia).
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],
-    allow_credentials=True,
+    allow_origins=["http://localhost:4200"],  # origem exata do Angular em dev
+    allow_credentials=True,  # libera envio/recebimento de cookies (refresh_token)
     allow_methods=["*"],
     allow_headers=["*"],
 )

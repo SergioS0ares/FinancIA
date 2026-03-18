@@ -44,3 +44,19 @@ def create_refresh_token(data: dict) -> str:
     )
     return encoded_jwt
 
+
+def verify_refresh_token(token: str) -> dict | None:
+    """
+    Valida o refresh token (cookie HTTP-Only) e devolve o payload (ex.: {"sub": email}).
+    Retorna None se inválido ou expirado.
+    """
+    try:
+        payload = jwt.decode(
+            token,
+            settings.REFRESH_SECRET_KEY,
+            algorithms=[settings.ALGORITHM],
+        )
+        return payload
+    except Exception:
+        return None
+

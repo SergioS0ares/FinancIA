@@ -60,10 +60,10 @@
 
     <!-- Ações com melhor design e feedback -->
     <div class="actions">
-      <button 
+      <button mat-raised-button
         [disabled]="reenviarDisabilitado"
         (click)="reenviarEmail()"
-        class="primary-action">
+        class="btn-primary-page full-width">
         <span *ngIf="!reenviarDisabilitado && !isLoading">
           <mat-icon class="small">refresh</mat-icon>
           Reenviar E-mail
@@ -74,9 +74,9 @@
         </span>
       </button>
 
-      <button 
+      <button mat-stroked-button
         (click)="irParaConfirmacao()"
-        class="secondary-action">
+        class="secondary-btn full-width">
         <mat-icon class="small">key</mat-icon>
         Já tenho o código
       </button>
