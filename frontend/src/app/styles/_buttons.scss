@@ -19,13 +19,13 @@ button:not([disabled]):hover,
   box-shadow: 0 4px 16px rgba(246, 189, 56, 0.35);
 }
 
-// Botões primários (Entrar, Cadastrar): hover com gradiente amarelo mais forte
+// Botões primários: hover já definido em _theme (borda amarela suave)
 .btn-primary-page:hover:not(:disabled),
 .btn-primary-soft:hover:not(:disabled),
 .primary-action:hover:not(:disabled),
 .primary-btn:hover:not(:disabled),
 .mat-mdc-raised-button.btn-primary-page:hover:not(:disabled) {
-  box-shadow: 0 6px 24px rgba(246, 189, 56, 0.5);
+  box-shadow: 0 6px 20px var(--btn-primary-shadow, rgba(0, 0, 0, 0.12));
 }
 
 // Botões secundários / outlined: hover com fundo amarelo suave

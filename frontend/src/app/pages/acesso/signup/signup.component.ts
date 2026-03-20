@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { DefaultLoginLayoutComponent } from '../default-login-layout/default-login-layout.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, FormArray, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,6 +18,8 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../environments/environment';
 import { getApiErrorMessage } from '../../../core/utils/api-error';
+
+declare const google: any;
 
 @Component({
   selector: 'app-signup',
@@ -39,7 +41,8 @@ import { getApiErrorMessage } from '../../../core/utils/api-error';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignUpComponent {
+export class SignUpComponent implements AfterViewInit {
+  @ViewChild('googleButton', { static: false }) googleButton?: ElementRef<HTMLDivElement>;
 
   readonly siteKey = environment.recaptchaSiteKey;
   captchaToken: string | null = null;
@@ -63,6 +66,33 @@ export class SignUpComponent {
   mensagemCepInvalido = '';
   // future-proof: container for extra dynamic fields if needed
   extraFields = this.fb.group({});
+
+  ngAfterViewInit(): void {
+    // GIS carrega com defer; um tick garante o #googleButton no DOM
+    setTimeout(() => this.initGoogleSignIn(), 0);
+  }
+
+  private initGoogleSignIn(): void {
+    const el = this.googleButton?.nativeElement;
+    if (!el) {
+      return;
+    }
+    if (typeof google === 'undefined') {
+      console.error('Google Identity Services script não carregado.');
+      return;
+    }
+    google.accounts.id.initialize({
+      client_id: environment.googleClientId,
+      ux_mode: 'redirect',
+      login_uri: 'http://localhost:8000/api/auth/google/callback',
+    });
+    google.accounts.id.renderButton(el, {
+      theme: 'outline',
+      size: 'large',
+      width: '100%',
+      text: 'signup_with',
+    });
+  }
 
   constructor() {
     // Create a single, extensible signup form with clear field keys (easier to test)
@@ -121,9 +151,17 @@ export class SignUpComponent {
       email: form.email,
       password: form.password
     }).subscribe({
-      next: () => {
-        this.toastService.success('Cadastro realizado com sucesso! Você já pode fazer login.');
-        this.router.navigate(['/login']);
+      next: (res) => {
+        localStorage.setItem('emailCadastro', form.email);
+        this.toastService.success(
+          res.message ?? 'Cadastro criado! Verifique seu e-mail para o código de 6 dígitos.',
+          'Quase lá'
+        );
+        if (res.idVerificacao) {
+          this.router.navigate(['/confirmar-codigo', res.idVerificacao]);
+        } else {
+          this.router.navigate(['/login']);
+        }
       },
       error: (err: any) => {
         this.toastService.error(getApiErrorMessage(err, 'Erro ao cadastrar. Tente novamente.'));

@@ -1,5 +1,7 @@
 from datetime import datetime, timezone, timedelta
 import secrets
+import uuid
+import random
 
 from fastapi import (
     APIRouter,
@@ -21,8 +23,10 @@ from app.models.user import (
     TokenGoogle,
     UserCreate,
     UserLogin,
-    UserResponse,
     EsqueciSenhaRequest,
+    VerificarCodigoRequest,
+    RegistroPendenteResponse,
+    ReenviarCodigoRequest,
 )
 from app.core.security import (
     create_access_token,
@@ -31,7 +35,7 @@ from app.core.security import (
     verify_password,
     verify_refresh_token,
 )
-from app.services.email_service import send_reset_password_email
+from app.services.email_service import send_reset_password_email, send_verification_email
 from jose import jwt
 
 # Nome do cookie HTTP-Only onde o refresh token fica (invisível para o JavaScript)
@@ -45,16 +49,15 @@ router = APIRouter(prefix="/auth", tags=["Autenticação"])
 
 @router.post(
     "/registrar",
-    response_model=UserResponse,
+    response_model=RegistroPendenteResponse,
     status_code=status.HTTP_201_CREATED,
 )
-async def registrar_usuario(user: UserCreate):
+async def registrar_usuario(user: UserCreate, background_tasks: BackgroundTasks):
     """
-    Cria um novo usuário no sistema.
+    Cria um novo usuário inativo até confirmar o código de 6 dígitos enviado por e-mail.
     """
     db = get_db()
 
-    # 1. O Leão de Chácara: Verifica se esse e-mail já existe no banco
     usuario_existente = await db.usuarios.find_one({"email": user.email})
     if usuario_existente:
         raise HTTPException(
@@ -62,23 +65,35 @@ async def registrar_usuario(user: UserCreate):
             detail="Este e-mail já está cadastrado em nosso sistema.",
         )
 
-    # 2. A Máquina Enigma: Criptografa a senha do usuário
     senha_criptografada = get_password_hash(user.password)
-
-    # 3. Preparando o Pacote: Monta os dados para salvar
     novo_usuario_dict = user.model_dump()
-    del novo_usuario_dict["password"]  # NUNCA salvamos a senha limpa!
+    del novo_usuario_dict["password"]
+
+    id_verificacao = str(uuid.uuid4())
+    codigo_verificacao = str(random.randint(100000, 999999))
+    codigo_expira_em = datetime.now(timezone.utc) + timedelta(minutes=10)
 
     novo_usuario_dict["hashed_password"] = senha_criptografada
-    novo_usuario_dict["is_active"] = True
+    novo_usuario_dict["is_active"] = False
     novo_usuario_dict["data_criacao"] = datetime.now(timezone.utc)
+    novo_usuario_dict["id_verificacao"] = id_verificacao
+    novo_usuario_dict["codigo_verificacao"] = codigo_verificacao
+    novo_usuario_dict["codigo_expira_em"] = codigo_expira_em
 
-    # 4. O Cofre: Salva no MongoDB (numa coleção chamada 'usuarios')
-    resultado = await db.usuarios.insert_one(novo_usuario_dict)
+    await db.usuarios.insert_one(novo_usuario_dict)
 
-    # 5. A Resposta: Devolvemos os dados para a tela (sem a senha, claro)
-    novo_usuario_dict["id"] = str(resultado.inserted_id)
-    return novo_usuario_dict
+    confirm_link = f"http://localhost:4200/confirmar-codigo/{id_verificacao}"
+    context = {
+        "confirm_link": confirm_link,
+        "codigo": codigo_verificacao,
+        "id_verificacao": id_verificacao,
+    }
+    background_tasks.add_task(send_verification_email, user.email, context)
+
+    return RegistroPendenteResponse(
+        message="Usuário criado. Verifique seu e-mail para o código de 6 dígitos.",
+        idVerificacao=id_verificacao,
+    )
 
 
 @router.post("/login", response_model=Token)
@@ -103,6 +118,12 @@ async def login(user: UserLogin, response: Response):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="E-mail ou senha incorretos.",
+        )
+
+    if not db_user.get("is_active", True):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Conta não verificada. Confirme o código enviado ao seu e-mail.",
         )
 
     # 3. Gera os tokens
@@ -175,6 +196,127 @@ async def login_google(google_data: TokenGoogle, response: Response):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token do Google inválido ou expirado.",
         )
+
+
+def _as_utc(dt: datetime | None) -> datetime | None:
+    if dt is None:
+        return None
+    if dt.tzinfo is None:
+        return dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
+
+
+@router.post("/verificar", response_model=Token)
+async def verificar_codigo(req: VerificarCodigoRequest, response: Response):
+    """
+    Valida código de 6 dígitos pós-cadastro, ativa o usuário e devolve tokens.
+    Refresh: 30 dias se mantenhaMeConectado, senão 1 dia.
+    """
+    db = get_db()
+    usuario = await db.usuarios.find_one({"id_verificacao": req.idVerificacao})
+    if not usuario:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Sessão de verificação não encontrada.",
+        )
+
+    agora = datetime.now(timezone.utc)
+    expira = _as_utc(usuario.get("codigo_expira_em"))
+    if expira is None or agora > expira:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Código expirado. Solicite um novo.",
+        )
+
+    codigo_enviado = (req.codigo or "").strip()
+    if usuario.get("codigo_verificacao") != codigo_enviado:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Código inválido.",
+        )
+
+    await db.usuarios.update_one(
+        {"_id": usuario["_id"]},
+        {
+            "$set": {"is_active": True},
+            "$unset": {
+                "id_verificacao": "",
+                "codigo_verificacao": "",
+                "codigo_expira_em": "",
+            },
+        },
+    )
+
+    email = usuario["email"]
+    access_token = create_access_token(data={"sub": email})
+    refresh_days = 30 if req.mantenhaMeConectado else 1
+    refresh_token = create_refresh_token(data={"sub": email}, days=refresh_days)
+    max_age_cookie = refresh_days * 24 * 60 * 60
+
+    response.set_cookie(
+        key=REFRESH_TOKEN_COOKIE,
+        value=refresh_token,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        max_age=max_age_cookie,
+    )
+
+    uid = str(usuario["_id"])
+    nome = usuario.get("nome", "Usuário")
+    return Token(
+        access_token=access_token,
+        refresh_token=refresh_token,
+        token_type="bearer",
+        nome=nome,
+        tipoUsuario="CLIENTE",
+        id=uid,
+    )
+
+
+@router.post("/reenviar-codigo")
+async def reenviar_codigo(
+    req: ReenviarCodigoRequest,
+    background_tasks: BackgroundTasks,
+):
+    """
+    Gera novo código para contas ainda não ativas. Resposta genérica por segurança.
+    """
+    db = get_db()
+    usuario = await db.usuarios.find_one({"email": req.email})
+
+    if usuario and not usuario.get("is_active", False):
+        id_verificacao = usuario.get("id_verificacao")
+        if not id_verificacao:
+            id_verificacao = str(uuid.uuid4())
+        codigo = str(random.randint(100000, 999999))
+        expira = datetime.now(timezone.utc) + timedelta(minutes=10)
+
+        await db.usuarios.update_one(
+            {"_id": usuario["_id"]},
+            {
+                "$set": {
+                    "id_verificacao": id_verificacao,
+                    "codigo_verificacao": codigo,
+                    "codigo_expira_em": expira,
+                }
+            },
+        )
+
+        confirm_link = f"http://localhost:4200/confirmar-codigo/{id_verificacao}"
+        background_tasks.add_task(
+            send_verification_email,
+            req.email,
+            {
+                "confirm_link": confirm_link,
+                "codigo": codigo,
+                "id_verificacao": id_verificacao,
+            },
+        )
+
+    return {
+        "message": "Se o e-mail estiver cadastrado e pendente de verificação, você receberá um novo código em instantes."
+    }
 
 
 @router.post("/refresh")

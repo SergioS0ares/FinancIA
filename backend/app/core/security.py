@@ -31,12 +31,14 @@ def create_access_token(data: dict) -> str:
     return encoded_jwt
 
 
-def create_refresh_token(data: dict) -> str:
-    """Cria a Chave Mestra para renovar o acesso sem pedir login de novo (Dura vários dias)."""
+def create_refresh_token(data: dict, days: int | None = None) -> str:
+    """
+    Cria a Chave Mestra para renovar o acesso sem pedir login de novo.
+    Se `days` for informado, usa essa validade em dias; senão usa REFRESH_TOKEN_EXPIRE_DAYS.
+    """
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(
-        days=settings.REFRESH_TOKEN_EXPIRE_DAYS
-    )
+    valid_days = days if days is not None else settings.REFRESH_TOKEN_EXPIRE_DAYS
+    expire = datetime.now(timezone.utc) + timedelta(days=valid_days)
     to_encode.update({"exp": expire})
 
     encoded_jwt = jwt.encode(

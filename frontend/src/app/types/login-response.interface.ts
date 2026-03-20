@@ -15,14 +15,15 @@ export interface LoginResponse {
   mensagem?: string;
 }
 
-/** Resposta do backend Python /auth/registrar: UserResponse (sem verificação de e-mail). */
+/** Resposta do backend Python /auth/registrar (cadastro com verificação por e-mail). */
 export interface RegisterResponse {
-  id: string;
-  email: string;
-  nome: string;
-  is_active: boolean;
-  data_criacao?: string;
+  message?: string;
   idVerificacao?: string;
+  id?: string;
+  email?: string;
+  nome?: string;
+  is_active?: boolean;
+  data_criacao?: string;
   mensagem?: string;
 }
 

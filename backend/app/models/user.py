@@ -60,6 +60,9 @@ class Token(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
+    nome: Optional[str] = None
+    tipoUsuario: Optional[str] = None
+    id: Optional[str] = None
 
 
 class TokenData(BaseModel):
@@ -76,6 +79,27 @@ class TokenGoogle(BaseModel):
 
 class EsqueciSenhaRequest(BaseModel):
     """Payload da tela 'Esqueci minha senha'."""
+
+    email: EmailStr
+
+
+class VerificarCodigoRequest(BaseModel):
+    """Confirmação pós-cadastro: ID na URL + código de 6 dígitos."""
+
+    idVerificacao: str
+    codigo: str = Field(..., min_length=6, max_length=6)
+    mantenhaMeConectado: bool = False
+
+
+class RegistroPendenteResponse(BaseModel):
+    """Resposta do cadastro quando o e-mail ainda precisa ser confirmado."""
+
+    message: str
+    idVerificacao: str
+
+
+class ReenviarCodigoRequest(BaseModel):
+    """Reenvio do código de verificação (precisa do e-mail)."""
 
     email: EmailStr
 

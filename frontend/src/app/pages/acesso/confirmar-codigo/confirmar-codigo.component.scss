@@ -1,92 +1,440 @@
 @use '../../../../styles/variables' as *;
 
-.codigo-content {
+// Tela dedicada: fundo navy/teal profundo (identidade “segurança”)
+$verify-navy: #1a2a3a;
+$verify-navy-deep: #0f1820;
+$brand-yellow: #f0c030;
+$brand-teal: #1a2a3a;
+
+:host {
+  display: block;
+}
+
+// Remove padding do card pai para o fundo ocupar a área do conteúdo
+:host ::ng-deep .content {
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.verify-page {
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+:host-context(.theme-dark) .verify-page {
+  background: transparent;
+}
+
+// Cartão principal — claro na referência “premium”; escuro no tema dark
+.verify-card {
   text-align: center;
   width: 100%;
-  max-width: 480px;
+  max-width: 440px;
   margin: 0 auto;
-  padding: 28px 24px 2rem;
+  padding: 32px 28px 28px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+:host-context(.theme-dark) .verify-card {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.brand-shield {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, $brand-yellow, #e5a820);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(240, 192, 48, 0.35);
+
+  mat-icon {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+    color: $brand-teal;
+  }
+}
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: $brand-teal;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+.brand-a {
+  color: $brand-yellow;
+}
+
+:host-context(.theme-dark) .brand-name {
+  color: #e8e4dc;
+}
+
+:host-context(.theme-dark) .brand-shield mat-icon {
+  color: #1a2a3a;
 }
 
 .header-icon {
-  margin-bottom: 2rem;
-  i { font-size: 2.5rem; color: var(--primary); }
+  margin-bottom: 1.25rem;
+  position: relative;
+
+  .icon-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-mat-icon {
+    font-size: 2.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: $brand-yellow;
+    filter: drop-shadow(0 2px 6px rgba(240, 192, 48, 0.35));
+  }
+
+  .loading-spinner {
+    position: absolute;
+    inset: -4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+  }
+}
+
+:host-context(.theme-dark) .header-icon .loading-spinner {
+  background: rgba(31, 31, 46, 0.9);
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+.small-icon {
+  font-size: 1.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .content-header {
-  margin-bottom: 2rem;
-  .main-title { color: var(--primary); font-size: 1.35rem; font-weight: 700; margin-bottom: 0.5rem; }
-  .description { color: var(--text-secondary); font-size: 1rem; margin: 0; strong { color: var(--primary); } }
+  margin-bottom: 1.5rem;
+
+  .main-title {
+    color: $brand-teal;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .description {
+    color: #5a5a68;
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.55;
+
+    strong {
+      color: $brand-yellow;
+      font-weight: 700;
+    }
+  }
+}
+
+:host-context(.theme-dark) .content-header .main-title {
+  color: $brand-yellow;
+}
+
+:host-context(.theme-dark) .content-header .description {
+  color: #b8b4bc;
+
+  strong {
+    color: #ffd54f;
+  }
 }
 
 .codigo-inputs-wrapper {
-  margin: 2rem 0;
-  padding: 1.25rem;
-  border-radius: var(--radius-lg);
-  background: var(--bg-surface-elevated);
-  border: 2px solid var(--border);
-  transition: border-color 0.3s, background 0.3s;
-  &.success { border-color: var(--success); background: rgba(82, 196, 26, 0.08); }
-  &.error { border-color: var(--danger); background: rgba(209, 73, 91, 0.08); animation: shake 0.5s ease-in-out; }
+  margin: 1.5rem 0 1rem;
+  padding: 1.25rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid #e8e8ec;
+  transition: border-color 0.25s, box-shadow 0.25s;
+
+  &.success {
+    border-color: rgba(76, 175, 80, 0.55);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
+  }
+
+  &.error {
+    border-color: rgba(220, 38, 38, 0.55);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+    animation: shake 0.45s ease-in-out;
+  }
 }
 
-::ng-deep .ant-input-otp { gap: 0.5rem; display: flex; justify-content: center; }
-::ng-deep .ant-input-otp-input {
-  width: 48px !important; height: 56px !important; min-width: 48px !important; min-height: 56px !important;
-  font-size: 1.5rem !important; font-weight: 700 !important;
-  border: 2px solid var(--border-strong) !important; border-radius: var(--radius) !important;
-  background: var(--bg-surface) !important; color: var(--text-primary) !important;
-  text-align: center !important;
-  &:focus, &.ant-input-otp-input-active { border-color: var(--primary) !important; box-shadow: 0 0 0 2px rgba(246, 189, 56, 0.2) !important; }
+:host-context(.theme-dark) .codigo-inputs-wrapper {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: #3d3a4a;
+}
+
+.otp-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.otp-cell {
+  width: 44px;
+  height: 48px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+  color: #1a1a1a;
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-align: center;
+  font-family: system-ui, -apple-system, Roboto, Arial, sans-serif;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+  outline: none;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: $brand-yellow;
+    background: #fffbeb;
+    box-shadow:
+      0 0 0 3px rgba(240, 192, 48, 0.35),
+      0 2px 8px rgba(240, 192, 48, 0.2);
+  }
+
+  &:hover:not(:focus) {
+    border-color: #cfd0d4;
+  }
+}
+
+:host-context(.theme-dark) .otp-cell {
+  background: #2a2838;
+  border-color: #4a4658;
+  color: #f5f5f8;
+
+  &:focus {
+    border-color: $brand-yellow;
+    background: #323042;
+    box-shadow:
+      0 0 0 3px rgba(240, 192, 48, 0.28),
+      0 2px 10px rgba(0, 0, 0, 0.35);
+  }
 }
 
 .status-feedback {
   margin: 1rem 0;
-  padding: 0.75rem;
-  border-radius: var(--radius);
-  background: var(--bg-surface-elevated);
-  border-left: 4px solid var(--primary);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+  border-left: 4px solid $brand-yellow;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  .status-icon.success { color: var(--success); }
-  .status-icon.error { color: var(--danger); }
-  .status-icon.info { color: var(--primary); }
-  .status-text { margin: 0; font-size: 0.9rem; }
+  text-align: left;
+
+  .status-icon.success {
+    color: #2e7d32;
+  }
+  .status-icon.error {
+    color: #c62828;
+  }
+  .status-icon.info {
+    color: $brand-teal;
+  }
+
+  .status-text {
+    margin: 0;
+    font-size: 0.9rem;
+    flex: 1;
+  }
+}
+
+:host-context(.theme-dark) .status-feedback {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.checkbox-section {
+  margin: 1rem 0 0.5rem;
+  text-align: left;
+  display: flex;
+  justify-content: center;
+}
+
+:host ::ng-deep .keep-connected-checkbox {
+  --mdc-checkbox-selected-checkmark-color: #{$brand-teal};
+  --mdc-checkbox-selected-focus-icon-color: #{$brand-yellow};
+  --mdc-checkbox-selected-hover-icon-color: #{$brand-yellow};
+  --mdc-checkbox-selected-icon-color: #{$brand-yellow};
+  --mdc-checkbox-selected-pressed-icon-color: #{$brand-yellow};
+  --mdc-checkbox-unselected-focus-icon-color: #{$brand-yellow};
+  --mdc-checkbox-unselected-hover-icon-color: #{$brand-yellow};
+  color: inherit;
 }
 
 .help-section {
-  margin-top: 1.5rem;
-  .resend-btn { color: var(--primary) !important; border: none !important; background: none !important; cursor: pointer; }
+  margin-top: 1.25rem;
+}
+
+.help-text {
+  .timer-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 0 0 0.35rem;
+    font-size: 0.875rem;
+    color: #6b6b78;
+  }
+
+  .highlight {
+    color: $brand-yellow;
+    font-weight: 700;
+  }
+
+  .instruction-text {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #8a8a96;
+  }
+}
+
+:host-context(.theme-dark) .help-text .timer-text {
+  color: #a8a4b0;
+}
+
+:host-context(.theme-dark) .help-text .instruction-text {
+  color: #7a7682;
+}
+
+.inline-icon {
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
+  color: $brand-yellow;
+}
+
+.resend-section {
+  margin-top: 0.75rem;
+}
+
+.resend-btn {
+  color: $brand-yellow !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+}
+
+// Botão principal amarelo marca (layout externo)
+:host ::ng-deep .primary-btn.btn-primary-page {
+  background: $brand-yellow !important;
+  color: $brand-teal !important;
+  border: none !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.06em !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 14px rgba(240, 192, 48, 0.35) !important;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.06);
+    box-shadow: 0 6px 20px rgba(240, 192, 48, 0.45) !important;
+  }
+}
+
+// Secundário: link estilo no rodapé do cartão
+:host ::ng-deep .secondary-btn.secondary-btn-outline {
+  background: transparent !important;
+  color: $brand-yellow !important;
+  border: 1px solid rgba(240, 192, 48, 0.45) !important;
+  border-radius: 8px !important;
+
+  &:hover {
+    background: rgba(240, 192, 48, 0.1) !important;
+    border-color: $brand-yellow !important;
+  }
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-4px); }
-  40%, 80% { transform: translateX(4px); }
-}
-
-@media (max-width: 768px) {
-  .content-header .main-title { font-size: 1.2rem; }
-  ::ng-deep .ant-input-otp-input { width: 40px !important; height: 48px !important; min-width: 40px !important; min-height: 48px !important; font-size: 1.25rem !important; }
-}
-
-@media (max-width: 600px) {
-  .codigo-content {
-    padding: 20px 16px;
-    max-width: 100%;
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
   }
 }
 
 @media (max-width: 480px) {
-  .codigo-content {
-    padding: 16px 12px;
+  .otp-grid {
+    gap: 6px;
   }
-  ::ng-deep .ant-input-otp-input { width: 36px !important; height: 44px !important; min-width: 36px !important; min-height: 44px !important; font-size: 1.1rem !important; }
+
+  .otp-cell {
+    width: 40px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+
+  .verify-card {
+    padding: 24px 18px 22px;
+  }
 }
 
-@media (max-width: 380px) {
-  .codigo-content {
-    padding: 12px 8px;
+@media (max-width: 360px) {
+  .otp-cell {
+    width: 36px;
+    height: 42px;
+    font-size: 1.1rem;
   }
 }

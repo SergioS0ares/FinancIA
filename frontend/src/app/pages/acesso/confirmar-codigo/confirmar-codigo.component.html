@@ -1,80 +1,100 @@
-<app-default-login-layout 
-  title="Digite o código de verificação"
-  primaryBtnText="Verificar Código"
-  secondaryBtnText="Voltar"
+<app-default-login-layout
+  title=""
+  primaryBtnText="CONFIRMAR CÓDIGO"
+  secondaryBtnText="Voltar para verificação"
   [disablePrimaryBtn]="!isCodigoCompleto() || carregando"
   [primaryBtnLoading]="carregando"
   (submit)="verificarCodigo()"
   (navigate)="voltarVerificacao()">
-  
-  <div class="codigo-content page-card">
-    <!-- Melhorado o ícone com animação e melhor posicionamento -->
-    <div class="header-icon" [class.loading]="carregando">
-      <div class="icon-container">
-        <i nz-icon nzType="safety-certificate" nzTheme="outline"></i>
-        <div class="loading-spinner" *ngIf="carregando">
-          <i nz-icon nzType="loading" nzSpin></i>
+  <div class="verify-page">
+    <div class="verify-card codigo-content">
+      <div class="brand-row" aria-hidden="true">
+        <div class="brand-shield">
+          <mat-icon>shield</mat-icon>
+        </div>
+        <span class="brand-name">Financi<span class="brand-a">A</span></span>
+      </div>
+
+      <div class="header-icon" [class.loading]="carregando">
+        <div class="icon-container">
+          <mat-icon class="header-mat-icon">verified_user</mat-icon>
+          @if (carregando) {
+            <div class="loading-spinner">
+              <mat-icon class="spinning">refresh</mat-icon>
+            </div>
+          }
         </div>
       </div>
-    </div>
-    
-    <!-- Melhorada a tipografia e hierarquia visual -->
-    <div class="content-header">
-      <h3 class="main-title">Verificação de Segurança</h3>
-      <p class="description">
-        Insira o código de <strong>6 dígitos</strong> que enviamos para seu e-mail
-      </p>
-    </div>
 
-    <!-- Melhorado o wrapper dos inputs com melhor espaçamento -->
-    <div class="codigo-inputs-wrapper" [class.error]="hasError" [class.success]="isCodigoCompleto()">
-      <nz-input-otp 
-        [nzLength]="6" 
-        [(ngModel)]="codigo"
-        (ngModelChange)="onCodigoChange()">
-      </nz-input-otp>
-    </div>
-    
-    <!-- Adicionado feedback visual para estados -->
-    <div class="status-feedback" *ngIf="statusMessage">
-      <div class="status-icon" [ngClass]="statusType">
-        <i nz-icon [nzType]="getStatusIcon()" [nzTheme]="statusType === 'error' ? 'fill' : 'outline'"></i>
-      </div>
-      <p class="status-text" [ngClass]="statusType">{{ statusMessage }}</p>
-    </div>
-    
-    <!-- Checkbox para manter conectado -->
-    <div class="checkbox-section">
-      <mat-checkbox [(ngModel)]="mantenhaMeConectado" class="keep-connected-checkbox">
-        Manter-me conectado
-      </mat-checkbox>
-    </div>
-
-    <!-- Melhorado o texto de ajuda com melhor hierarquia -->
-    <div class="help-section">
-      <div class="help-text">
-        <p class="timer-text">
-          <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
-          O código expira em <span class="highlight">10 minutos</span>
-        </p>
-        <p class="instruction-text">
-          Certifique-se de digitá-lo corretamente
+      <div class="content-header">
+        <h3 class="main-title">Verificação de segurança</h3>
+        <p class="description">
+          Insira o código de <strong>6 dígitos</strong> que enviamos para seu e-mail
         </p>
       </div>
-      
-      <!-- Adicionado botão para reenviar código -->
-      <div class="resend-section" *ngIf="!carregando">
-        <button 
-          nz-button 
-          nzType="link" 
-          nzSize="small"
-          class="resend-btn"
-          (click)="reenviarCodigo()"
-          [disabled]="isReenviarDisabled"
-          [nzLoading]="reenviando">
-          <i nz-icon nzType="reload" nzTheme="outline" *ngIf="!reenviando"></i>
-          {{ reenviarButtonText }}
-        </button>
+
+      <div
+        class="codigo-inputs-wrapper"
+        [class.error]="hasError"
+        [class.success]="isCodigoCompleto()"
+        (paste)="onOtpPaste($event)">
+        <div class="otp-grid" role="group" aria-label="Código de 6 dígitos">
+          @for (i of otpIndices; track i) {
+            <input
+              [id]="'otp-' + i"
+              class="otp-cell"
+              type="text"
+              inputmode="numeric"
+              maxlength="1"
+              autocomplete="one-time-code"
+              [attr.aria-label]="'Dígito ' + (i + 1) + ' de 6'"
+              (input)="onOtpInput(i, $event)"
+              (keydown)="onOtpKeydown(i, $event)" />
+          }
+        </div>
+      </div>
+
+      @if (statusMessage) {
+        <div class="status-feedback">
+          <div class="status-icon" [ngClass]="statusType">
+            <mat-icon>{{ getStatusIcon() }}</mat-icon>
+          </div>
+          <p class="status-text" [ngClass]="statusType">{{ statusMessage }}</p>
+        </div>
+      }
+
+      <div class="checkbox-section">
+        <mat-checkbox [(ngModel)]="mantenhaMeConectado" class="keep-connected-checkbox">
+          Manter-me conectado
+        </mat-checkbox>
+      </div>
+
+      <div class="help-section">
+        <div class="help-text">
+          <p class="timer-text">
+            <mat-icon class="inline-icon">schedule</mat-icon>
+            O código expira em <span class="highlight">10 minutos</span>
+          </p>
+          <p class="instruction-text">Certifique-se de digitá-lo corretamente</p>
+        </div>
+
+        @if (!carregando) {
+          <div class="resend-section">
+            <button
+              mat-button
+              type="button"
+              class="resend-btn"
+              (click)="reenviarCodigo()"
+              [disabled]="isReenviarDisabled">
+              @if (reenviando) {
+                <mat-icon class="spinning small-icon">refresh</mat-icon>
+              } @else {
+                <mat-icon class="small-icon">refresh</mat-icon>
+              }
+              {{ reenviarButtonText }}
+            </button>
+          </div>
+        }
       </div>
     </div>
   </div>

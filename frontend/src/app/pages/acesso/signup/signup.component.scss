@@ -15,9 +15,21 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--btn-primary-from), var(--btn-primary-to));
-  color: #fff;
+  background: linear-gradient(135deg, var(--yellow-main), var(--yellow-deep));
+  color: var(--brown-main);
   margin-bottom: 12px;
+}
+
+.theme-dark .signup-header .signup-icon {
+  color: #1a1410;
+}
+
+.google-signin-slot {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 12px;
+  min-height: 44px;
 }
 
 .signup-phrase {
