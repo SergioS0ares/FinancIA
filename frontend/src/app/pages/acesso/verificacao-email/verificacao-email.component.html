@@ -1,105 +1,71 @@
-
-<!-- Ocultando botões do layout padrão e removendo título duplicado -->
 <app-default-login-layout>
-  <div class="verificacao-email-content">
-    <!-- Ícone principal com animação mais elegante -->
-    <div class="main-icon">
-      <div class="icon-container" [class.pulse]="emailEnviado">
-        <mat-icon>mail</mat-icon>
-        <div class="success-indicator" *ngIf="emailEnviado">
-          <mat-icon>check_circle</mat-icon>
-        </div>
-      </div>
-    </div>
-
-    <!-- Título e descrição mais profissionais -->
-    <div class="header-content">
-      <h1 class="title">Verifique seu e-mail</h1>
-      <p class="subtitle">Falta apenas um passo para completar seu cadastro</p>
-    </div>
-
-    <!-- Informações do email com melhor hierarquia visual -->
-    <div class="email-info">
-      <p class="description">
-        Enviamos um link de verificação para:
-      </p>
-      <div class="email-display">
-        <mat-icon class="small">mail</mat-icon>
-        <span class="email-address">{{ emailUsuario }}</span>
-      </div>
-      <p class="instruction">
-        Clique no link do e-mail para ativar sua conta. Não esqueça de verificar sua pasta de spam.
-      </p>
-    </div>
-
-    <!-- Ilustração visual mais elegante -->
-    <div class="email-illustration">
-      <div class="email-steps">
-        <div class="step completed">
-          <div class="step-icon">
-            <mat-icon class="small">person_add</mat-icon>
-          </div>
-          <span>Cadastro</span>
-        </div>
-        <div class="step-line completed"></div>
-        <div class="step active">
-          <div class="step-icon">
-            <mat-icon class="small">mail</mat-icon>
-          </div>
-          <span>Verificação</span>
-        </div>
-        <div class="step-line"></div>
-        <div class="step">
-          <div class="step-icon">
-            <mat-icon class="small">check_circle</mat-icon>
-          </div>
-          <span>Ativação</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ações com melhor design e feedback -->
-    <div class="actions">
-      <button mat-raised-button
-        [disabled]="reenviarDisabilitado"
-        (click)="reenviarEmail()"
-        class="btn-primary-page full-width">
-        <span *ngIf="!reenviarDisabilitado && !isLoading">
-          <mat-icon class="small">refresh</mat-icon>
-          Reenviar E-mail
-        </span>
-        <span *ngIf="reenviarDisabilitado && !isLoading">
-          <mat-icon class="small">schedule</mat-icon>
-          Aguarde {{ tempoRestante }}s
-        </span>
-      </button>
-
-      <button mat-stroked-button
-        (click)="irParaConfirmacao()"
-        class="secondary-btn full-width">
-        <mat-icon class="small">key</mat-icon>
-        Já tenho o código
-      </button>
-    </div>
-
-    <!-- Seção de ajuda mais organizada -->
-    <div class="help-section">
-      <div class="help-item">
-        <mat-icon class="small">help</mat-icon>
-        <span>Não recebeu o e-mail?</span>
-      </div>
-      <ul class="help-list">
-        <li>Verifique sua pasta de spam ou lixo eletrônico</li>
-        <li>Aguarde alguns minutos, pode haver atraso na entrega</li>
-        <li>Certifique-se de que o endereço está correto</li>
-      </ul>
-      
-      <button 
-        (click)="voltarLogin()"
-        class="back-link">
-        <mat-icon class="small">arrow_back</mat-icon>
-        Voltar ao login
-      </button>
-    </div>
+  <div class="flex justify-center mb-4 md:mb-5">
+    <img
+      src="assets/cerebro.png"
+      alt=""
+      class="h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_24px_rgba(240,192,48,0.45)]"
+      width="180"
+      height="180" />
   </div>
-</app-default-login-layout>  
+
+  <h2 class="text-xl md:text-2xl font-bold text-center text-gray-900 mb-2">
+    Verifique seu <span class="text-ouro">e-mail</span>
+  </h2>
+  <p class="text-sm md:text-base text-center text-gray-600 leading-relaxed mb-6">
+    Enviamos um link para <span class="text-gray-900 font-semibold">{{ emailUsuario }}</span>. Abra a mensagem e confirme. Verifique também o spam.
+  </p>
+
+  <div class="hidden sm:flex justify-center gap-2 md:gap-3 mb-8 text-gray-500 text-xs md:text-sm">
+    <span class="flex items-center gap-1 text-ouro"><mat-icon class="!text-base">person_add</mat-icon> Cadastro</span>
+    <span class="text-gray-300">—</span>
+    <span class="flex items-center gap-1 font-semibold text-gray-800"
+      ><mat-icon class="!text-base text-ciano">mail</mat-icon> Verificação</span
+    >
+    <span class="text-gray-300">—</span>
+    <span class="flex items-center gap-1"><mat-icon class="!text-base">check_circle</mat-icon> Ativação</span>
+  </div>
+
+  <div class="flex flex-col gap-3 mb-6">
+    <button
+      type="button"
+      class="w-full min-h-12 rounded-xl bg-ouro text-white font-bold shadow-lg transition hover:brightness-105 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
+      [disabled]="reenviarDisabilitado || isLoading"
+      (click)="reenviarEmail()">
+      @if (!reenviarDisabilitado && !isLoading) {
+        <mat-icon class="!text-xl">refresh</mat-icon>
+        <span>Reenviar e-mail</span>
+      } @else if (reenviarDisabilitado && !isLoading) {
+        <mat-icon class="!text-xl">schedule</mat-icon>
+        <span>Aguarde {{ tempoRestante }}s</span>
+      } @else {
+        <span>Enviando…</span>
+      }
+    </button>
+
+    <button
+      type="button"
+      class="w-full min-h-12 rounded-xl border border-gray-200 bg-white text-gray-800 font-medium flex items-center justify-center gap-2 hover:border-ciano/50 transition-colors"
+      (click)="irParaConfirmacao()">
+      <mat-icon class="!text-xl text-ouro">key</mat-icon>
+      <span>Já tenho o código</span>
+    </button>
+  </div>
+
+  <div class="rounded-xl border border-ciano/25 bg-cianoLight p-4 mb-6">
+    <p class="text-gray-600 text-sm flex items-start gap-2 !m-0">
+      <mat-icon class="!text-lg shrink-0 text-ouro">help</mat-icon>
+      <span>
+        <strong class="text-gray-900">Não recebeu?</strong> Confira spam, aguarde alguns minutos ou toque em reenviar.
+      </span>
+    </p>
+  </div>
+
+  <div class="flex justify-center w-full text-sm">
+    <a
+      routerLink="/login"
+      class="text-ouro font-semibold hover:underline inline-flex items-center justify-center gap-1">
+      <mat-icon class="!text-lg">arrow_back</mat-icon>
+      Voltar ao login
+    </a>
+  </div>
+</app-default-login-layout>

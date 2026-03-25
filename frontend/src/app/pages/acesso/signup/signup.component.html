@@ -1,5 +1,5 @@
 <app-default-login-layout>
-  <div class="card-inner page-card">
+  <div class="card-inner page-card signup-in-shell">
     <div class="signup-header">
       <p class="signup-phrase">É rápido e fácil. Comece agora.</p>
       <h1 class="title">Crie sua conta</h1>
@@ -42,14 +42,25 @@
       <p class="recaptcha-note">Proteção contra robôs pode ser reativada configurando ng-recaptcha.</p>
       <button mat-raised-button type="submit" class="btn-primary-page full-width" [disabled]="signupForm.invalid">Cadastrar</button>
       <div class="divider" role="separator">Ou entre com:</div>
-      <div class="socials">
-        <div #googleButton class="google-signin-slot" aria-label="Cadastrar com Google"></div>
-        <button mat-stroked-button type="button" class="social facebook" aria-label="Entrar com Facebook">
-          <span class="facebook-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></span>
-          <span>Facebook</span>
+      <div class="socials access-socials flex flex-col gap-3">
+        <div #googleButton class="google-signin-host w-full flex justify-center min-h-[44px]" aria-label="Cadastrar com Google"></div>
+        <button
+          mat-stroked-button
+          type="button"
+          class="social social-facebook w-full min-h-[44px] flex items-center justify-center gap-2.5 !normal-case !rounded-xl !px-4"
+          aria-label="Cadastrar com Facebook">
+          <span class="facebook-icon shrink-0" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" class="block">
+              <path
+                fill="currentColor"
+                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+            </svg>
+          </span>
+          <span class="font-medium text-sm">Facebook</span>
         </button>
       </div>
       <div class="signup-link link-muted">Já tem uma conta? <a (click)="irParaLogin()" class="link-primary" role="button">Entre</a></div>
     </form>
   </div>
 </app-default-login-layout>
+

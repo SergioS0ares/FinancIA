@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 
 import { AcessService } from '../../../core/services/access.service';
 import { DefaultLoginLayoutComponent } from '../default-login-layout/default-login-layout.component';
@@ -20,7 +19,6 @@ import { getApiErrorMessage } from '../../../core/utils/api-error';
     DefaultLoginLayoutComponent,
     MatCheckboxModule,
     MatIconModule,
-    MatButtonModule,
   ],
   templateUrl: './confirmar-codigo.component.html',
   styleUrls: ['./confirmar-codigo.component.scss'],
@@ -182,7 +180,7 @@ export class ConfirmarCodigoComponent implements OnInit {
   }
 
   voltarVerificacao(): void {
-    void this.router.navigate(['/login']);
+    void this.router.navigate(['/verificacao-email']);
   }
 
   private iniciarCooldownReenvio(): void {

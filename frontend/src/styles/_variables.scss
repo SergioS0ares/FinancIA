@@ -1,0 +1,145 @@
+// Tema global: modo claro / escuro (variáveis semânticas + legado para componentes)
+:root {
+  // Modo claro — bege quente (referência UI)
+  --color-background: #f4f1e8;
+  --color-text-primary: #1c1917;
+  --color-text-secondary: #57534e;
+  --color-border-base: #d6d3cd;
+
+  // Cartão de acesso (login) — bege cartão + contorno escuro
+  --color-login-card-bg: #efede0;
+  --color-login-card-border: #0f0f0f;
+  --color-login-card-text: #111827;
+  --color-login-card-muted: #57534e;
+  --color-login-card-shadow: 0 20px 50px rgba(28, 25, 23, 0.12);
+  --login-static-bg-image: url('/assets/login-static-bg-light.svg');
+
+  // Compatibilidade (Material, botões, inputs)
+  --color-access-shell: #121d28;
+  --color-access-card: var(--color-login-card-bg);
+  --color-access-card-text: var(--color-login-card-text);
+  --color-access-card-muted: var(--color-login-card-muted);
+  --color-bg-card: var(--color-login-card-bg);
+
+  // Campos dentro do cartão (recessed)
+  --login-field-bg: #faf8f3;
+  --login-field-border: #c8c4b8;
+
+  --yellow-main: #f2b705;
+  --yellow-soft: #fde68a;
+  --yellow-deep: #d97706;
+  --brown-main: #3b221b;
+  --brown-soft: #5b372c;
+
+  --bg-page: var(--color-background);
+  --bg-page-alt: #ebe8df;
+  --bg-surface: var(--color-bg-card);
+  --bg-surface-elevated: #f5f2ea;
+
+  --bg-gradient-start: rgba(242, 183, 5, 0.12);
+  --bg-gradient-end: rgba(59, 34, 27, 0.05);
+
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-muted: #78716c;
+
+  --border: var(--color-border-base);
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --shadow-sm: 0 1px 3px rgba(31, 21, 18, 0.06);
+  --shadow-md: 0 12px 36px rgba(31, 21, 18, 0.1);
+
+  --primary: var(--yellow-main);
+  --primary-hover: #ffc94d;
+  --accent: var(--yellow-deep);
+  --accent-hover: var(--yellow-main);
+  --danger: #dc2626;
+
+  --btn-primary-surface: #ffffff;
+  --btn-primary-surface-hover: #f3f1ee;
+  --btn-primary-on-surface: #1c1410;
+  --btn-primary-outline: #c8c2bc;
+  --btn-primary-shadow: rgba(28, 20, 16, 0.08);
+
+  --input-bg: var(--login-field-bg);
+  --input-border: var(--login-field-border);
+  --input-focus-ring: rgba(242, 183, 5, 0.45);
+}
+
+.dark,
+.theme-dark {
+  color-scheme: dark;
+
+  // Modo escuro — charcoal / navy premium (referência)
+  --color-background: #12141d;
+  --color-text-primary: #f3f4f6;
+  --color-text-secondary: #d1d5db;
+  --color-border-base: #3f3f46;
+
+  --color-login-card-bg: rgba(30, 32, 40, 0.92);
+  --color-login-card-border: #000000;
+  --color-login-card-text: #f9fafb;
+  --color-login-card-muted: #a1a1aa;
+  --color-login-card-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 40px rgba(212, 140, 0, 0.08);
+  --login-static-bg-image: url('/assets/login-static-bg-dark.svg');
+
+  --color-bg-card: #1e2229;
+
+  --bg-page: var(--color-background);
+  --bg-page-alt: #181b22;
+  --bg-surface: var(--color-bg-card);
+  --bg-surface-elevated: #2a2f3a;
+
+  --bg-gradient-start: rgba(212, 140, 0, 0.08);
+  --bg-gradient-end: rgba(0, 0, 0, 0.45);
+
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-muted: #9ca3af;
+
+  --border: var(--color-border-base);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.5);
+
+  --primary: #fbbf24;
+  --primary-hover: #fcd34d;
+  --accent: #f59e0b;
+  --accent-hover: #fbbf24;
+  --danger: #ef5350;
+
+  --btn-primary-surface: #f2b705;
+  --btn-primary-surface-hover: #fbbf24;
+  --btn-primary-on-surface: #1c1410;
+  --btn-primary-outline: rgba(251, 191, 36, 0.55);
+  --btn-primary-shadow: rgba(212, 140, 0, 0.35);
+
+  --login-field-bg: #1a1c23;
+  --login-field-border: #3f3f46;
+
+  --color-access-card: var(--color-login-card-bg);
+  --color-access-card-text: var(--color-login-card-text);
+  --color-access-card-muted: var(--color-login-card-muted);
+
+  --input-bg: var(--login-field-bg);
+  --input-border: var(--login-field-border);
+  --input-focus-ring: rgba(251, 191, 36, 0.4);
+}
+
+html {
+  height: 100%;
+}
+
+app-root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: block;
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}

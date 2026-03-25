@@ -1,0 +1,15 @@
+@import 'variables';
+@import 'tailwind';
+@import 'material-theme';
+
+// Estilos base (fundo global dinâmico — sem imports legados que possam fixar #fff no body)
+body {
+  @apply bg-background text-textPrimary font-sans transition-colors duration-300 min-h-screen;
+  margin: 0;
+}
+
+p {
+  @apply text-textSecondary;
+}
+
+@import 'ngx-toastr/toastr';

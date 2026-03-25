@@ -3,6 +3,14 @@
   padding: 0;
 }
 
+// Conteúdo direto no mat-card do layout (sem segundo cartão)
+.signup-in-shell.page-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
 .signup-header {
   text-align: center;
   margin-bottom: 24px;
@@ -24,12 +32,24 @@
   color: #1a1410;
 }
 
-.google-signin-slot {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 12px;
-  min-height: 44px;
+.google-signin-host ::ng-deep iframe {
+  border-radius: 10px !important;
+}
+
+.access-socials .social-facebook {
+  border-radius: 12px !important;
+  background: var(--login-field-bg) !important;
+  border-color: var(--login-field-border) !important;
+  color: var(--color-login-card-text) !important;
+}
+
+.access-socials .social-facebook:hover {
+  border-color: #f2b705 !important;
+  box-shadow: 0 4px 20px rgba(242, 183, 5, 0.25) !important;
+}
+
+.facebook-icon {
+  color: #1877f2;
 }
 
 .signup-phrase {

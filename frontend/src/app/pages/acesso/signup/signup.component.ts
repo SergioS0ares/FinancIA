@@ -1,4 +1,4 @@
-import { Component, inject, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, inject, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { DefaultLoginLayoutComponent } from '../default-login-layout/default-login-layout.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, FormArray, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,6 +18,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../environments/environment';
 import { getApiErrorMessage } from '../../../core/utils/api-error';
+import { bindGoogleButtonToTheme } from '../../../core/utils/google-identity';
 
 declare const google: any;
 
@@ -41,8 +42,10 @@ declare const google: any;
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignUpComponent implements AfterViewInit {
+export class SignUpComponent implements AfterViewInit, OnDestroy {
   @ViewChild('googleButton', { static: false }) googleButton?: ElementRef<HTMLDivElement>;
+
+  private unbindGoogle?: () => void;
 
   readonly siteKey = environment.recaptchaSiteKey;
   captchaToken: string | null = null;
@@ -68,30 +71,22 @@ export class SignUpComponent implements AfterViewInit {
   extraFields = this.fb.group({});
 
   ngAfterViewInit(): void {
-    // GIS carrega com defer; um tick garante o #googleButton no DOM
-    setTimeout(() => this.initGoogleSignIn(), 0);
+    setTimeout(() => this.scheduleGoogleBind(), 0);
   }
 
-  private initGoogleSignIn(): void {
+  ngOnDestroy(): void {
+    this.unbindGoogle?.();
+  }
+
+  private scheduleGoogleBind(attempt = 0): void {
     const el = this.googleButton?.nativeElement;
-    if (!el) {
+    if (typeof google !== 'undefined' && el) {
+      this.unbindGoogle = bindGoogleButtonToTheme(el, { text: 'signup_with' });
       return;
     }
-    if (typeof google === 'undefined') {
-      console.error('Google Identity Services script não carregado.');
-      return;
+    if (attempt < 35) {
+      setTimeout(() => this.scheduleGoogleBind(attempt + 1), 100);
     }
-    google.accounts.id.initialize({
-      client_id: environment.googleClientId,
-      ux_mode: 'redirect',
-      login_uri: 'http://localhost:8000/api/auth/google/callback',
-    });
-    google.accounts.id.renderButton(el, {
-      theme: 'outline',
-      size: 'large',
-      width: '100%',
-      text: 'signup_with',
-    });
   }
 
   constructor() {

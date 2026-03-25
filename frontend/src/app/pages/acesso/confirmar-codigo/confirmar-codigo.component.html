@@ -1,101 +1,106 @@
-<app-default-login-layout
-  title=""
-  primaryBtnText="CONFIRMAR CÓDIGO"
-  secondaryBtnText="Voltar para verificação"
-  [disablePrimaryBtn]="!isCodigoCompleto() || carregando"
-  [primaryBtnLoading]="carregando"
-  (submit)="verificarCodigo()"
-  (navigate)="voltarVerificacao()">
-  <div class="verify-page">
-    <div class="verify-card codigo-content">
-      <div class="brand-row" aria-hidden="true">
-        <div class="brand-shield">
-          <mat-icon>shield</mat-icon>
-        </div>
-        <span class="brand-name">Financi<span class="brand-a">A</span></span>
-      </div>
+<app-default-login-layout>
+  <div class="flex justify-center mb-4 md:mb-5">
+    <img
+      src="assets/cerebro.png"
+      alt=""
+      class="h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_24px_rgba(240,192,48,0.45)]"
+      width="180"
+      height="180" />
+  </div>
 
-      <div class="header-icon" [class.loading]="carregando">
-        <div class="icon-container">
-          <mat-icon class="header-mat-icon">verified_user</mat-icon>
-          @if (carregando) {
-            <div class="loading-spinner">
-              <mat-icon class="spinning">refresh</mat-icon>
-            </div>
-          }
-        </div>
-      </div>
+  <h2 class="text-xl md:text-2xl font-bold text-center tracking-wide text-gray-900 mb-2 uppercase">
+    Verificação de dois fatores
+  </h2>
+  <p class="text-sm md:text-base text-center text-gray-600 leading-relaxed mb-6">
+    Uma mensagem com um código de verificação foi enviada para seu e-mail. Por favor, verifique sua caixa de entrada.
+  </p>
 
-      <div class="content-header">
-        <h3 class="main-title">Verificação de segurança</h3>
-        <p class="description">
-          Insira o código de <strong>6 dígitos</strong> que enviamos para seu e-mail
-        </p>
-      </div>
-
-      <div
-        class="codigo-inputs-wrapper"
-        [class.error]="hasError"
-        [class.success]="isCodigoCompleto()"
-        (paste)="onOtpPaste($event)">
-        <div class="otp-grid" role="group" aria-label="Código de 6 dígitos">
-          @for (i of otpIndices; track i) {
-            <input
-              [id]="'otp-' + i"
-              class="otp-cell"
-              type="text"
-              inputmode="numeric"
-              maxlength="1"
-              autocomplete="one-time-code"
-              [attr.aria-label]="'Dígito ' + (i + 1) + ' de 6'"
-              (input)="onOtpInput(i, $event)"
-              (keydown)="onOtpKeydown(i, $event)" />
-          }
-        </div>
-      </div>
-
-      @if (statusMessage) {
-        <div class="status-feedback">
-          <div class="status-icon" [ngClass]="statusType">
-            <mat-icon>{{ getStatusIcon() }}</mat-icon>
-          </div>
-          <p class="status-text" [ngClass]="statusType">{{ statusMessage }}</p>
-        </div>
+  <div
+    class="flex justify-center mb-6 md:mb-8"
+    (paste)="onOtpPaste($event)"
+    role="group"
+    aria-label="Código de 6 dígitos">
+    <div
+      class="grid grid-cols-6 gap-2 sm:gap-3 w-full max-w-md"
+      [class.opacity-60]="carregando"
+      [class.ring-2]="hasError"
+      [class.ring-red-500]="hasError"
+      [class.rounded-xl]="hasError"
+      [class.p-2]="hasError">
+      @for (i of otpIndices; track i) {
+        <input
+          [id]="'otp-' + i"
+          class="otp-cell h-12 sm:h-14 w-full text-center text-lg sm:text-xl font-semibold rounded-xl border border-gray-200 bg-white text-gray-900 shadow-inner outline-none transition-all focus:border-ciano focus:ring-2 focus:ring-ciano/40 focus:shadow-[0_0_0_3px_rgba(48,240,240,0.2)]"
+          type="text"
+          inputmode="numeric"
+          maxlength="1"
+          autocomplete="one-time-code"
+          [attr.aria-label]="'Dígito ' + (i + 1) + ' de 6'"
+          (input)="onOtpInput(i, $event)"
+          (keydown)="onOtpKeydown(i, $event)" />
       }
-
-      <div class="checkbox-section">
-        <mat-checkbox [(ngModel)]="mantenhaMeConectado" class="keep-connected-checkbox">
-          Manter-me conectado
-        </mat-checkbox>
-      </div>
-
-      <div class="help-section">
-        <div class="help-text">
-          <p class="timer-text">
-            <mat-icon class="inline-icon">schedule</mat-icon>
-            O código expira em <span class="highlight">10 minutos</span>
-          </p>
-          <p class="instruction-text">Certifique-se de digitá-lo corretamente</p>
-        </div>
-
-        @if (!carregando) {
-          <div class="resend-section">
-            <button
-              mat-button
-              type="button"
-              class="resend-btn"
-              (click)="reenviarCodigo()"
-              [disabled]="isReenviarDisabled">
-              @if (reenviando) {
-                <mat-icon class="spinning small-icon">refresh</mat-icon>
-              } @else {
-                <mat-icon class="small-icon">refresh</mat-icon>
-              }
-              {{ reenviarButtonText }}
-            </button>
-          </div>
-        }
-      </div>
     </div>
   </div>
+
+  @if (statusMessage) {
+    <div class="flex items-start gap-2 mb-6 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+      <mat-icon
+        class="shrink-0 !text-xl"
+        [class.text-green-600]="statusType === 'success'"
+        [class.text-red-500]="statusType === 'error'"
+        [class.text-ciano]="statusType === 'info'">
+        {{ getStatusIcon() }}
+      </mat-icon>
+      <p
+        class="!m-0 text-gray-600"
+        [ngClass]="{
+          'text-green-800': statusType === 'success',
+          'text-red-600': statusType === 'error',
+        }">
+        {{ statusMessage }}
+      </p>
+    </div>
+  }
+
+  <div class="flex justify-center mb-6 md:mb-8">
+    <mat-checkbox [(ngModel)]="mantenhaMeConectado" color="primary" class="text-sm text-gray-600">
+      Mantenha-me conectado
+    </mat-checkbox>
+  </div>
+
+  <div class="mb-6 md:mb-8 text-center">
+    <button
+      type="button"
+      class="bg-ouro text-white font-bold py-3 px-6 rounded-xl w-full max-w-sm min-h-12 shadow-lg transition hover:brightness-105 disabled:opacity-50 disabled:pointer-events-none"
+      [disabled]="!isCodigoCompleto() || carregando"
+      (click)="verificarCodigo()">
+      @if (carregando) {
+        <span>Verificando…</span>
+      } @else {
+        Confirmar código
+      }
+    </button>
+  </div>
+
+  <div
+    class="flex flex-col sm:flex-row justify-between w-full max-w-sm mx-auto text-ouro font-semibold text-center text-sm gap-3 sm:gap-0 mb-6">
+    <button
+      type="button"
+      class="hover:underline bg-transparent border-0 cursor-pointer text-ouro p-0 disabled:opacity-50"
+      (click)="reenviarCodigo()"
+      [disabled]="isReenviarDisabled || carregando || reenviando">
+      {{ reenviarButtonText }}
+    </button>
+    <button
+      type="button"
+      class="hover:underline bg-transparent border-0 cursor-pointer text-ouro p-0"
+      (click)="voltarVerificacao()">
+      Voltar para verificação
+    </button>
+  </div>
+
+  <p class="text-center text-xs text-gray-500 !mb-0">
+    <mat-icon class="!text-sm align-middle !w-4 !h-4 text-ciano">schedule</mat-icon>
+    O código expira em <span class="text-ouro font-bold">10 minutos</span>
+  </p>
 </app-default-login-layout>

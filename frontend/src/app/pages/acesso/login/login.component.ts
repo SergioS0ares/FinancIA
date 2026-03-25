@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, inject, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { DefaultLoginLayoutComponent } from '../default-login-layout/default-login-layout.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 import { ILoginForm } from '../../../Interfaces/ILoginForm.interface';
 import { AuthService } from '../../../core/services/auth.service';
 import { getApiErrorMessage } from '../../../core/utils/api-error';
-import { environment } from '../../../environments/environment';
+import { bindGoogleButtonToTheme } from '../../../core/utils/google-identity';
 
 declare const google: any;
 
@@ -26,13 +26,14 @@ declare const google: any;
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
-  @ViewChild('googleButton', { static: true }) googleButton!: ElementRef;
+export class LoginComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('googleButton', { static: true }) googleButton!: ElementRef<HTMLDivElement>;
+
   loginForm: FormGroup<ILoginForm>;
   showLoginError = false;
   hidePassword = true;
@@ -42,11 +43,33 @@ export class LoginComponent implements OnInit {
   private toastService = inject(ToastrService);
   private authService = inject(AuthService);
 
+  private unbindGoogle?: () => void;
+
   constructor() {
     this.loginForm = new FormGroup<ILoginForm>({
       email: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-      senha: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] })
+      senha: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.scheduleGoogleBind();
+  }
+
+  ngOnDestroy(): void {
+    this.unbindGoogle?.();
+  }
+
+  /** GIS carrega com defer; tenta até o script estar disponível. */
+  private scheduleGoogleBind(attempt = 0): void {
+    const el = this.googleButton?.nativeElement;
+    if (typeof google !== 'undefined' && el) {
+      this.unbindGoogle = bindGoogleButtonToTheme(el, { text: 'continue_with' });
+      return;
+    }
+    if (attempt < 35) {
+      setTimeout(() => this.scheduleGoogleBind(attempt + 1), 100);
+    }
   }
 
   realizarLogin() {
@@ -82,7 +105,7 @@ export class LoginComponent implements OnInit {
         error: (err: any) => {
           this.showLoginError = true;
           this.toastService.error(getApiErrorMessage(err, 'Não foi possível acessar sua conta. Verifique seu e-mail e senha.'));
-        }
+        },
       });
     } else {
       this.showLoginError = true;
@@ -90,34 +113,24 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    if (typeof google !== 'undefined') {
-      google.accounts.id.initialize({
-        client_id: environment.googleClientId,
-        ux_mode: 'redirect',
-        login_uri: 'http://localhost:8000/api/auth/google/callback'
-      });
-
-      google.accounts.id.renderButton(this.googleButton.nativeElement, {
-        theme: 'outline',
-        size: 'large',
-        width: '100%'
-      });
-    } else {
-      console.error('Google Identity Services script não carregado.');
-    }
+  irParaCadastro() {
+    this.router.navigate(['signup']);
   }
-
-  irParaCadastro() { this.router.navigate(['signup']); }
 
   forgotPassword() {
     const email = this.loginForm.get('email')?.value;
-    if (!email) { this.toastService.warning('Por favor, digite seu e-mail antes de solicitar a redefinição de senha.'); return; }
-    if (this.loginForm.get('email')?.invalid) { this.toastService.warning('Por favor, digite um e-mail válido.'); return; }
+    if (!email) {
+      this.toastService.warning('Por favor, digite seu e-mail antes de solicitar a redefinição de senha.');
+      return;
+    }
+    if (this.loginForm.get('email')?.invalid) {
+      this.toastService.warning('Por favor, digite um e-mail válido.');
+      return;
+    }
 
     this.loginService.postEsqueciMinhaSenha(email).subscribe({
       next: () => this.toastService.success('Instruções para redefinição de senha foram enviadas para seu e-mail!'),
-      error: (err) => this.toastService.error(getApiErrorMessage(err, 'Erro ao enviar e-mail de redefinição. Tente novamente.'))
+      error: (err) => this.toastService.error(getApiErrorMessage(err, 'Erro ao enviar e-mail de redefinição. Tente novamente.')),
     });
   }
 }

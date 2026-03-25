@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
 const THEME_KEY = 'app-theme';
+const DARK_MODE_KEY = 'darkMode';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +12,22 @@ const THEME_KEY = 'app-theme';
   template: `<router-outlet></router-outlet>`,
 })
 export class AppComponent implements OnInit {
-  ngOnInit() {
-    if (typeof localStorage !== 'undefined') {
-      const saved = localStorage.getItem(THEME_KEY);
-      if (saved === 'dark') document.documentElement.classList.add('theme-dark');
-      else if (saved === 'light') document.documentElement.classList.remove('theme-dark');
+  constructor(@Inject(DOCUMENT) private readonly document: Document) {}
+
+  ngOnInit(): void {
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    const legacyDark = localStorage.getItem(DARK_MODE_KEY) === 'true';
+    const isDark = savedTheme === 'dark' || (savedTheme === null && legacyDark);
+
+    const el = this.document.documentElement;
+    if (isDark) {
+      el.classList.add('dark', 'theme-dark');
+    } else {
+      el.classList.remove('dark', 'theme-dark');
     }
   }
 }
-

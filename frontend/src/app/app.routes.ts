@@ -19,12 +19,13 @@ export const routes: Routes = [
     path: 'signup',
     loadComponent: () => import('./pages/acesso/signup/signup.component').then(m => m.SignUpComponent)
   },
-  // TODO: add real implementations for these access-related pages if needed.
-  // For now, they are disabled to avoid broken lazy-load imports.
-  // {
-  //   path: 'verificacao-email',
-  //   loadComponent: () => import('./pages/acesso/verificacao-email/verificacao-email.component').then(m => m.VerificacaoEmailComponent)
-  // },
+  {
+    path: 'verificacao-email',
+    loadComponent: () =>
+      import('./pages/acesso/verificacao-email/verificacao-email.component').then(
+        m => m.VerificacaoEmailComponent,
+      ),
+  },
   {
     path: 'confirmar-codigo/:id',
     loadComponent: () => import('./pages/acesso/confirmar-codigo/confirmar-codigo.component').then(m => m.ConfirmarCodigoComponent)

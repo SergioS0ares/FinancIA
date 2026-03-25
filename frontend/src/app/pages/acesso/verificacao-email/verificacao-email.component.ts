@@ -1,8 +1,7 @@
 import { Component, type OnInit, type OnDestroy, inject } from "@angular/core"
 import { CommonModule } from "@angular/common"
-import { Router } from "@angular/router"
+import { Router, RouterLink } from "@angular/router"
 import { MatIconModule } from "@angular/material/icon"
-import { MatButtonModule } from "@angular/material/button"
 import { DefaultLoginLayoutComponent } from "../default-login-layout/default-login-layout.component"
 import { AcessService } from "../../../core/services/access.service"
 import { ToastrService } from "ngx-toastr"
@@ -11,7 +10,12 @@ import { getApiErrorMessage } from "../../../core/utils/api-error"
 @Component({
   selector: "app-verificacao-email",
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, DefaultLoginLayoutComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatIconModule,
+    DefaultLoginLayoutComponent,
+  ],
   templateUrl: "./verificacao-email.component.html",
   styleUrls: ["./verificacao-email.component.scss"]
 })
@@ -71,13 +75,9 @@ export class VerificacaoEmailComponent implements OnInit, OnDestroy {
     }, 1000)
   }
 
-  voltarLogin(): void {
-    this.router.navigate(["/login"])
-  }
-
   irParaConfirmacao(): void {
     if (this.idVerificacao) {
-      this.router.navigate(["/confirmar-codigo/", this.idVerificacao])
+      this.router.navigate(["/confirmar-codigo", this.idVerificacao])
     } else {
       this.toastService.error("ID de verificação não encontrado. Tente fazer o cadastro novamente.")
     }
