@@ -1,45 +1,216 @@
-<!-- Minimal layout: menubar + sidebar with buttons -->
-<div class="layout-container">
-  <header class="toolbar" role="banner">
-    <div style="display:flex;align-items:center;gap:16px">
-      <img src="assets/png/LogoTavolaSimples.png" alt="Logo Tavola" class="logo" style="height:40px" />
-      <button class="menu-toggle" (click)="toggleSidebar()" type="button" aria-label="Alternar sidebar">
-        <mat-icon aria-hidden="true">menu</mat-icon>
+<div class="app-shell app-shell__bg min-h-screen w-full">
+  <header class="app-toolbar sticky top-0 z-20 h-16 flex items-center justify-between px-6">
+    <div class="flex items-center gap-4">
+      <img src="assets/logo_financia.png" alt="FinanciA" class="toolbar-brand" />
+
+      <button
+        class="md:hidden ml-2 p-2 rounded-full bg-transparent"
+        type="button"
+        aria-label="Abrir menu"
+        (click)="toggleSidebar()"
+      >
+        <mat-icon>menu</mat-icon>
       </button>
     </div>
 
-    <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
-      <span style="font-weight:600">{{ userName }}</span>
-      <button mat-button (click)="logout()" type="button">
+    <div class="flex items-center gap-4">
+      <div class="hidden lg:flex flex-col leading-tight">
+        <span class="font-extrabold text-sm text-textPrimary">{{ userName }}</span>
+        <span class="text-xs font-bold text-textSecondary opacity-80">{{ userType }}</span>
+      </div>
+
+      <!-- Toggle Claro/Escuro -->
+      <div class="flex items-center gap-1 rounded-full border border-borderBase bg-white/10 p-1 backdrop-blur">
+        <button
+          type="button"
+          class="theme-btn"
+          (click)="setLightTheme()"
+          [class.theme-btn--active]="!isDark"
+          aria-label="Modo claro"
+        >
+          <mat-icon>light_mode</mat-icon>
+        </button>
+        <button
+          type="button"
+          class="theme-btn"
+          (click)="setDarkTheme()"
+          [class.theme-btn--active]="isDark"
+          aria-label="Modo escuro"
+        >
+          <mat-icon>dark_mode</mat-icon>
+        </button>
+      </div>
+
+      <button mat-button type="button" (click)="logout()" class="logout-btn">
         <mat-icon>logout</mat-icon>
-        Sair
+        <span class="hidden sm:inline ml-1">Sair</span>
       </button>
     </div>
   </header>
 
-  <div class="main-wrapper">
-    <aside class="desktop-sidebar" [class.fechada]="!sidebarAberta" role="navigation" aria-label="Menu lateral">
-      <div class="sidebar-header">
-        <img src="assets/png/LogoTavolaSimples.png" alt="Logo Tavola" class="logo" />
-      </div>
-      <nav class="menu" role="navigation" aria-label="Menu principal">
-        <button routerLink="/home" routerLinkActive="active" type="button">
+  <div class="app-body flex w-full">
+    <!-- Sidebar Desktop (pill) -->
+    <aside class="sidebar-pill hidden md:flex flex-col items-center py-8">
+      <nav class="sidebar-pill__nav flex flex-col gap-4">
+        <button
+          type="button"
+          (click)="setActiveNav(0)"
+          [class.is-active]="activeNav === 0"
+          aria-label="Início"
+        >
           <mat-icon>home</mat-icon>
-          <span>Início</span>
         </button>
-        <button routerLink="/historico" routerLinkActive="active" type="button">
+        <button
+          type="button"
+          (click)="setActiveNav(1)"
+          [class.is-active]="activeNav === 1"
+          aria-label="Histórico"
+        >
           <mat-icon>history</mat-icon>
-          <span>Histórico</span>
         </button>
-        <button routerLink="/favoritos" routerLinkActive="active" type="button">
+        <button
+          type="button"
+          (click)="setActiveNav(2)"
+          [class.is-active]="activeNav === 2"
+          aria-label="Favoritos"
+        >
           <mat-icon>favorite</mat-icon>
-          <span>Favoritos</span>
         </button>
       </nav>
     </aside>
 
-    <main class="content" role="main">
-      <!-- Intentionally empty: this layout shows only sidebar + menubar -->
+    <!-- Sidebar Mobile (drawer) -->
+    <div *ngIf="mobileSidebarAberta" class="fixed inset-0 z-[100] md:hidden">
+      <div class="absolute inset-0 bg-black/40" (click)="closeMobileSidebar()" aria-hidden="true"></div>
+      <aside
+        class="absolute left-0 top-0 bottom-0 w-[78vw] max-w-[320px] bg-[var(--bg-surface-elevated)] border-r-4 border-[var(--yellow-main)] shadow-2xl p-6 overflow-auto"
+        role="navigation"
+        aria-label="Menu lateral mobile"
+      >
+        <div class="flex items-center justify-start mb-6">
+          <img src="assets/logo_financia.png" alt="FinanciA" class="h-10 w-auto drop-shadow" />
+        </div>
+
+        <nav class="sidebar-pill__nav flex flex-col gap-4">
+          <button type="button" (click)="setActiveNav(0); closeMobileSidebar()" [class.is-active]="activeNav === 0">
+            <mat-icon>home</mat-icon>
+            <span class="ml-3 font-bold">Início</span>
+          </button>
+          <button type="button" (click)="setActiveNav(1); closeMobileSidebar()" [class.is-active]="activeNav === 1">
+            <mat-icon>history</mat-icon>
+            <span class="ml-3 font-bold">Histórico</span>
+          </button>
+          <button type="button" (click)="setActiveNav(2); closeMobileSidebar()" [class.is-active]="activeNav === 2">
+            <mat-icon>favorite</mat-icon>
+            <span class="ml-3 font-bold">Favoritos</span>
+          </button>
+        </nav>
+      </aside>
+    </div>
+
+    <!-- Content -->
+    <main class="flex-1 p-6">
+      <div class="dashboard-grid">
+        <section class="dash-card dash-card--saldo">
+          <div class="flex items-start justify-between gap-4">
+            <div class="dash-card__title">Saldo Total</div>
+            <button
+              mat-flat-button
+              type="button"
+              class="!bg-ouro !text-white !rounded-full !px-5 !py-2 !font-extrabold"
+              (click)="abrirNovaTransacao()"
+              [disabled]="carregandoTransacoes"
+            >
+              Nova Transação
+            </button>
+          </div>
+          <div class="dash-card__value">{{ saldoTotal | currency:'BRL' }}</div>
+          <div class="dash-card__delta">
+            <span class="dash-card__delta-icon">↗</span> +2.1% esta semana
+          </div>
+        </section>
+
+        <section class="dash-card dash-card--ia">
+          <div class="dash-card__title">IA Insights</div>
+          <div class="dash-card__subtitle">IA Sugere: Otimizar</div>
+          <div class="dash-card__text">Categoria &quot;Restaurantes&quot;</div>
+        </section>
+
+        <section class="dash-card dash-card--chart dash-card--full">
+          <div class="dash-card__title">Gastos por Categoria (Gráfico Minimalista)</div>
+          <div class="scatter" aria-hidden="true">
+            <div class="scatter__axis-y"></div>
+            <div class="scatter__axis-x"></div>
+            <div class="scatter__label-y">Aluguel</div>
+            <div class="scatter__ticks">
+              <span>Aluguel</span>
+              <span>Mercado</span>
+              <span>Laser</span>
+            </div>
+
+            <!-- Pontos (simulação visual) -->
+            <div class="scatter__dot" style="left: 18%; top: 78%; background: #f2b705; width: 9px; height: 9px;"></div>
+            <div class="scatter__dot" style="left: 22%; top: 74%; background: var(--text-primary); width: 7px; height: 7px;"></div>
+            <div class="scatter__dot" style="left: 25%; top: 70%; background: #f2b705; width: 6px; height: 6px;"></div>
+            <div class="scatter__dot" style="left: 28%; top: 68%; background: var(--text-primary); width: 7px; height: 7px; opacity: .9;"></div>
+            <div class="scatter__dot" style="left: 31%; top: 66%; background: #f2b705; width: 6px; height: 6px;"></div>
+            <div class="scatter__dot" style="left: 35%; top: 60%; background: var(--text-primary); width: 8px; height: 8px;"></div>
+            <div class="scatter__dot" style="left: 40%; top: 58%; background: #f2b705; width: 7px; height: 7px;"></div>
+            <div class="scatter__dot" style="left: 45%; top: 54%; background: var(--text-primary); width: 8px; height: 8px;"></div>
+            <div class="scatter__dot" style="left: 48%; top: 50%; background: #f2b705; width: 7px; height: 7px;"></div>
+            <div class="scatter__dot" style="left: 52%; top: 47%; background: var(--text-primary); width: 8px; height: 8px;"></div>
+            <div class="scatter__dot" style="left: 58%; top: 44%; background: #f2b705; width: 7px; height: 7px;"></div>
+            <div class="scatter__dot" style="left: 63%; top: 42%; background: var(--text-primary); width: 8px; height: 8px;"></div>
+            <div class="scatter__dot" style="left: 68%; top: 38%; background: #f2b705; width: 7px; height: 7px;"></div>
+            <div class="scatter__dot" style="left: 73%; top: 35%; background: var(--text-primary); width: 8px; height: 8px;"></div>
+            <div class="scatter__dot" style="left: 78%; top: 30%; background: #f2b705; width: 7px; height: 7px;"></div>
+          </div>
+        </section>
+
+        <section class="dash-card dash-card--chart dash-card--full">
+          <div class="dash-card__title">Transações</div>
+
+          <div *ngIf="carregandoTransacoes" class="mt-4 text-textSecondary !font-bold">
+            Carregando...
+          </div>
+
+          <div
+            *ngIf="!carregandoTransacoes && transacoes.length === 0"
+            class="mt-4 text-textSecondary !font-bold"
+          >
+            Nenhuma transação ainda.
+          </div>
+
+          <div *ngIf="!carregandoTransacoes && transacoes.length > 0" class="transactions-list mt-4">
+            <div *ngFor="let t of transacoes" class="transaction-row">
+              <div class="transaction-left">
+                <div class="transaction-main">
+                  {{ t.descricao || t.categoria || 'Sem descrição' }}
+                </div>
+                <div class="transaction-sub">
+                  <span>{{ t.categoria || 'Geral' }}</span>
+                  <span *ngIf="t.data" class="opacity-70">• {{ t.data | date:'dd/MM/yyyy' }}</span>
+                </div>
+              </div>
+
+              <div class="transaction-right">
+                <div
+                  class="transaction-type"
+                  [ngClass]="t.tipo === 'receita' ? 'text-emerald-500' : 'text-rose-500'"
+                >
+                  {{ t.tipo === 'receita' ? 'Receita' : 'Despesa' }}
+                </div>
+                <div
+                  class="transaction-value"
+                  [ngClass]="t.tipo === 'receita' ? 'text-emerald-500' : 'text-rose-500'"
+                >
+                  {{ t.valor | currency:'BRL' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
   </div>
 </div>

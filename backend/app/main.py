@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.db.mongodb import connect_to_mongo, close_mongo_connection
-from app.api.routes import auth
+from app.api.main import api_router
 
 
 @asynccontextmanager
@@ -34,5 +34,5 @@ async def root():
     return {"message": "🚀 Servidor do FinancIA está VIVO e respirando no Python!"}
 
 
-app.include_router(auth.router, prefix="/api")
+app.include_router(api_router, prefix="/api")
 

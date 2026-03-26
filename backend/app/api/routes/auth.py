@@ -5,6 +5,7 @@ import random
 
 from fastapi import (
     APIRouter,
+    Depends,
     HTTPException,
     status,
     Request,
@@ -320,7 +321,7 @@ async def reenviar_codigo(
 
 
 @router.post("/refresh")
-async def refresh(request: Request, response: Response):
+async def refresh(request: Request, db=Depends(get_db)):
     """
     Lê o refresh_token do cookie HTTP-Only (enviado automaticamente pelo
     navegador com withCredentials: true) e devolve um novo access_token.
@@ -341,18 +342,19 @@ async def refresh(request: Request, response: Response):
         )
 
     email = payload["sub"]
-    new_access_token = create_access_token(data={"sub": email})
-    new_refresh_token = create_refresh_token(data={"sub": email})
+    user = await db.usuarios.find_one({"email": email})
+    if not user or not user.get("is_active", True):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Usuário inativo ou não encontrado.",
+        )
 
-    response.set_cookie(
-        key=REFRESH_TOKEN_COOKIE,
-        value=new_refresh_token,
-        httponly=True,
-        secure=False,
-        samesite="lax",
-        max_age=REFRESH_MAX_AGE,
-    )
-
+    access_token_data = {
+        "sub": user["email"],
+        "type": "access",
+        "nome": user.get("nome"),
+    }
+    new_access_token = create_access_token(access_token_data)
     return {"access_token": new_access_token, "token_type": "bearer"}
 
 
@@ -495,12 +497,33 @@ async def mudar_senha(token: str, payload: dict):
     return {"message": "Senha atualizada com sucesso."}
 
 
-@router.post("/logout")
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
 async def logout(response: Response):
     """
-    Remove o cookie do refresh_token para encerrar a sessão de forma segura.
+    Limpa cookies de sessão (refresh_token/JWT) para encerrar a sessão com segurança.
     """
-    response.delete_cookie(key=REFRESH_TOKEN_COOKIE)
-    return {"message": "Logout realizado."}
+    # Obs: o login grava refresh_token em cookie HTTP-Only. Alguns frontends também podem tentar
+    # deletar um cookie chamado access_token, então limpamos ambos para garantir consistência.
+    domain = getattr(settings, "COOKIE_DOMAIN", None)
+    secure_cookie = False  # mantemos compatível com set_cookie(secure=False) usado no login
+    samesite = "lax"
+
+    response.delete_cookie(
+        key="access_token",
+        path="/",
+        domain=domain,
+        httponly=True,
+        samesite=samesite,
+        secure=secure_cookie,
+    )
+    response.delete_cookie(
+        key=REFRESH_TOKEN_COOKIE,
+        path="/",
+        domain=domain,
+        httponly=True,
+        samesite=samesite,
+        secure=secure_cookie,
+    )
+    return {"message": "Sessão encerrada com sucesso."}
 
 
