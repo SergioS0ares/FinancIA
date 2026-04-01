@@ -100,7 +100,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
             res.imagem,
             res.restauranteId
           );
-          this.router.navigate(['app']);
+          void this.router.navigate(['/app']);
         },
         error: (err: any) => {
           this.showLoginError = true;

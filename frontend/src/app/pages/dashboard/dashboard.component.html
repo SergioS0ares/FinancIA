@@ -1,0 +1,146 @@
+<div class="dashboard-page">
+  <header class="dashboard-page__intro">
+    <h1 class="dashboard-page__title">Painel de controle</h1>
+    <p class="dashboard-page__lead">
+      Visão rápida da sua saúde financeira: saldo consolidado, sugestões da IA, distribuição de gastos e últimas movimentações.
+    </p>
+  </header>
+
+  <div class="dashboard-grid">
+    <!-- 1. Saldo total dinâmico (receitas − despesas) -->
+    <section class="dash-card dash-card--saldo" aria-labelledby="dash-saldo-heading">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <div id="dash-saldo-heading" class="dash-card__title">Saldo total</div>
+          <p class="dashboard-page__card-hint m-0 mt-1">
+            Valor consolidado: soma das receitas menos soma das despesas.
+          </p>
+        </div>
+        <button
+          mat-flat-button
+          type="button"
+          class="dash-action-btn"
+          (click)="abrirNovaTransacao()"
+          [disabled]="carregandoTransacoes"
+        >
+          Nova transação
+        </button>
+      </div>
+      <div class="dash-card__value" *ngIf="!carregandoTransacoes">{{ saldoTotal | currency:'BRL' }}</div>
+      <div class="dash-card__value dash-card__value--loading" *ngIf="carregandoTransacoes">…</div>
+      <div class="saldo-resumo" *ngIf="!carregandoTransacoes">
+        <div class="saldo-resumo__item saldo-resumo__item--in">
+          <span class="saldo-resumo__label">Receitas</span>
+          <span class="saldo-resumo__value text-emerald-600 dark:text-emerald-400">{{ totalReceitas | currency:'BRL' }}</span>
+        </div>
+        <div class="saldo-resumo__item saldo-resumo__item--out">
+          <span class="saldo-resumo__label">Despesas</span>
+          <span class="saldo-resumo__value text-rose-600 dark:text-rose-400">{{ totalDespesas | currency:'BRL' }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. IA Insights -->
+    <section class="dash-card dash-card--ia" aria-labelledby="dash-ia-heading">
+      <div class="dash-card__title-row">
+        <mat-icon class="dash-card__title-icon text-ouro" aria-hidden="true">auto_awesome</mat-icon>
+        <div id="dash-ia-heading" class="dash-card__title !mb-0">IA insights</div>
+      </div>
+      <div class="dash-card__subtitle">Sugestão para você</div>
+      <p class="dash-card__text m-0">
+        Otimizar a categoria <strong class="text-ouro">&quot;{{ categoriaParaInsight }}&quot;</strong> — revise lançamentos
+        recentes e compare com o que você costuma gastar quando houver mais histórico.
+      </p>
+      <ul class="ia-hints" aria-label="Outras ideias da IA">
+        <li>Defina um teto mensal por categoria prioritária.</li>
+        <li>Cadastre despesas fixas para acompanhar o que é recorrente.</li>
+      </ul>
+    </section>
+
+    <!-- 3. Gráfico minimalista: barras por categoria + dispersão decorativa quando há poucos dados -->
+    <section class="dash-card dash-card--chart dash-card--full" aria-labelledby="dash-chart-heading">
+      <div id="dash-chart-heading" class="dash-card__title">Gastos por categoria</div>
+      <p class="dashboard-page__card-hint m-0 mt-1 mb-4">
+        Visualização minimalista: barras proporcionais às suas despesas por categoria (com base nas transações carregadas).
+      </p>
+
+      <div *ngIf="carregandoTransacoes" class="chart-empty">Carregando dados…</div>
+
+      <ng-container *ngIf="!carregandoTransacoes">
+        <div *ngIf="gastosPorCategoria.length === 0" class="chart-empty">
+          Nenhuma despesa categorizada ainda. Ao registrar despesas com categoria, o gráfico será preenchido automaticamente.
+        </div>
+
+        <div *ngIf="gastosPorCategoria.length > 0" class="category-bars" role="img" aria-label="Barras de gasto por categoria">
+          <div *ngFor="let item of gastosPorCategoria" class="category-bar-row">
+            <div class="category-bar-row__head">
+              <span class="category-bar-row__name">{{ item.categoria }}</span>
+              <span class="category-bar-row__val">{{ item.valor | currency:'BRL' }}</span>
+            </div>
+            <div class="category-bar-row__track">
+              <div
+                class="category-bar-row__fill"
+                [style.width.%]="larguraBarraCategoria(item.valor)"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scatter scatter--compact mt-6" aria-hidden="true" *ngIf="gastosPorCategoria.length > 0">
+          <div class="scatter__label-y">Dispersão ilustrativa (volume × posição)</div>
+          <div class="scatter__axis-y"></div>
+          <div class="scatter__axis-x"></div>
+          <div class="scatter__ticks">
+            <span *ngFor="let item of gastosPorCategoria.slice(0, 3)">{{ item.categoria }}</span>
+          </div>
+          <ng-container *ngFor="let item of gastosPorCategoria.slice(0, 8); let i = index">
+            <div
+              class="scatter__dot scatter__dot--accent"
+              [style.left.%]="10 + (i * 10) % 70"
+              [style.top.%]="75 - larguraBarraCategoria(item.valor) * 0.55"
+              [style.width.px]="6 + (i % 3)"
+              [style.height.px]="6 + (i % 3)"
+            ></div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </section>
+
+    <!-- 4. Transações recentes -->
+    <section class="dash-card dash-card--chart dash-card--full" aria-labelledby="dash-tx-heading">
+      <div id="dash-tx-heading" class="dash-card__title">Transações recentes</div>
+      <p class="dashboard-page__card-hint m-0 mt-1">
+        As {{ limiteRecentes }} últimas movimentações (entradas e saídas), da mais recente para a mais antiga.
+      </p>
+
+      <div *ngIf="carregandoTransacoes" class="mt-4 text-textSecondary font-bold">Carregando…</div>
+
+      <div *ngIf="!carregandoTransacoes && transacoes.length === 0" class="mt-4 text-textSecondary font-bold">
+        Nenhuma transação ainda. Use &quot;Nova transação&quot; para começar.
+      </div>
+
+      <div *ngIf="!carregandoTransacoes && transacoesRecentes.length > 0" class="transactions-list mt-4">
+        <div *ngFor="let t of transacoesRecentes" class="transaction-row">
+          <div class="transaction-left">
+            <div class="transaction-main">
+              {{ t.descricao || t.categoria || 'Sem descrição' }}
+            </div>
+            <div class="transaction-sub">
+              <span>{{ t.categoria || 'Geral' }}</span>
+              <span *ngIf="t.data" class="opacity-70">• {{ t.data | date:'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+
+          <div class="transaction-right">
+            <div class="transaction-type" [ngClass]="t.tipo === 'receita' ? 'text-emerald-500' : 'text-rose-500'">
+              {{ t.tipo === 'receita' ? 'Receita' : 'Despesa' }}
+            </div>
+            <div class="transaction-value" [ngClass]="t.tipo === 'receita' ? 'text-emerald-500' : 'text-rose-500'">
+              {{ t.valor | currency:'BRL' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

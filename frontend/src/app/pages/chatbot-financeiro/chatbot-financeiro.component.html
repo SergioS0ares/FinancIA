@@ -1,0 +1,31 @@
+<div class="app-page-head">
+  <h1 class="app-page-head__title">Assistente financeiro</h1>
+  <p class="app-page-head__sub">Pergunte em linguagem natural sobre seus gastos e metas</p>
+</div>
+
+<div class="chat-layout max-w-[720px] mx-auto w-full">
+  <section class="dash-card chat-card">
+    <div class="coming-soon__badge">
+      <mat-icon>smart_toy</mat-icon>
+      Em breve
+    </div>
+    <p class="app-placeholder-hint m-0">
+      Exemplos: &quot;Quanto gastei com mercado este mês?&quot; ou &quot;Posso comprar esse celular agora?&quot; — o assistente usará
+      suas transações e regras de privacidade para responder.
+    </p>
+
+    <div class="chat-mock" aria-hidden="true">
+      <div class="chat-bubble chat-bubble--user">Quanto gastei em transporte nos últimos 30 dias?</div>
+      <div class="chat-bubble chat-bubble--bot">
+        <mat-icon class="chat-bubble__icon">hourglass_empty</mat-icon>
+        Quando o chat estiver ativo, a resposta aparecerá aqui com base nos seus dados.
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="chat-input w-full">
+      <mat-label>Sua pergunta</mat-label>
+      <input matInput disabled placeholder="Digite aqui quando o assistente estiver disponível" />
+    </mat-form-field>
+    <button mat-flat-button type="button" class="dash-action-btn w-full sm:w-auto" disabled>Enviar</button>
+  </section>
+</div>

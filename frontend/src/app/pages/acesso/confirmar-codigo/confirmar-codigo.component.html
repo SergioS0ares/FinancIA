@@ -1,17 +1,8 @@
-<app-default-login-layout>
-  <div class="flex justify-center mb-4 md:mb-5">
-    <img
-      src="assets/cerebro.png"
-      alt=""
-      class="h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_24px_rgba(240,192,48,0.45)]"
-      width="180"
-      height="180" />
-  </div>
-
-  <h2 class="text-xl md:text-2xl font-bold text-center tracking-wide text-gray-900 mb-2 uppercase">
+<app-default-login-layout screenSubtitle="Verificação">
+  <h2 class="text-xl md:text-2xl font-bold text-center tracking-wide text-loginCardText mb-2 uppercase">
     Verificação de dois fatores
   </h2>
-  <p class="text-sm md:text-base text-center text-gray-600 leading-relaxed mb-6">
+  <p class="text-sm md:text-base text-center text-loginCardMuted leading-relaxed mb-6">
     Uma mensagem com um código de verificação foi enviada para seu e-mail. Por favor, verifique sua caixa de entrada.
   </p>
 
@@ -30,7 +21,7 @@
       @for (i of otpIndices; track i) {
         <input
           [id]="'otp-' + i"
-          class="otp-cell h-12 sm:h-14 w-full text-center text-lg sm:text-xl font-semibold rounded-xl border border-gray-200 bg-white text-gray-900 shadow-inner outline-none transition-all focus:border-ciano focus:ring-2 focus:ring-ciano/40 focus:shadow-[0_0_0_3px_rgba(48,240,240,0.2)]"
+          class="otp-cell h-12 sm:h-14 w-full text-center text-lg sm:text-xl font-semibold rounded-xl border border-loginCardBorder bg-[var(--login-field-bg)] text-loginCardText shadow-inner outline-none transition-all focus:border-ouro focus:ring-2 focus:ring-ouro/35"
           type="text"
           inputmode="numeric"
           maxlength="1"
@@ -43,16 +34,17 @@
   </div>
 
   @if (statusMessage) {
-    <div class="flex items-start gap-2 mb-6 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+    <div
+      class="flex items-start gap-2 mb-6 rounded-xl border border-loginCardBorder bg-loginCard/80 px-4 py-3 text-sm">
       <mat-icon
         class="shrink-0 !text-xl"
         [class.text-green-600]="statusType === 'success'"
         [class.text-red-500]="statusType === 'error'"
-        [class.text-ciano]="statusType === 'info'">
+        [class.text-ouro]="statusType === 'info'">
         {{ getStatusIcon() }}
       </mat-icon>
       <p
-        class="!m-0 text-gray-600"
+        class="!m-0 text-loginCardMuted"
         [ngClass]="{
           'text-green-800': statusType === 'success',
           'text-red-600': statusType === 'error',
@@ -63,7 +55,7 @@
   }
 
   <div class="flex justify-center mb-6 md:mb-8">
-    <mat-checkbox [(ngModel)]="mantenhaMeConectado" color="primary" class="text-sm text-gray-600">
+    <mat-checkbox [(ngModel)]="mantenhaMeConectado" color="primary" class="text-sm text-loginCardMuted">
       Mantenha-me conectado
     </mat-checkbox>
   </div>
@@ -71,7 +63,7 @@
   <div class="mb-6 md:mb-8 text-center">
     <button
       type="button"
-      class="bg-ouro text-white font-bold py-3 px-6 rounded-xl w-full max-w-sm min-h-12 shadow-lg transition hover:brightness-105 disabled:opacity-50 disabled:pointer-events-none"
+      class="bg-ouro text-white font-bold py-3 px-6 rounded-full w-full max-w-sm min-h-12 shadow-lg transition hover:brightness-105 disabled:opacity-50 disabled:pointer-events-none uppercase tracking-wide"
       [disabled]="!isCodigoCompleto() || carregando"
       (click)="verificarCodigo()">
       @if (carregando) {
@@ -99,8 +91,8 @@
     </button>
   </div>
 
-  <p class="text-center text-xs text-gray-500 !mb-0">
-    <mat-icon class="!text-sm align-middle !w-4 !h-4 text-ciano">schedule</mat-icon>
+  <p class="text-center text-xs text-loginCardMuted !mb-0">
+    <mat-icon class="!text-sm align-middle !w-4 !h-4 text-ouro">schedule</mat-icon>
     O código expira em <span class="text-ouro font-bold">10 minutos</span>
   </p>
 </app-default-login-layout>

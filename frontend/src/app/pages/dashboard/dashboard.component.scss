@@ -1,0 +1,160 @@
+:host {
+  display: block;
+}
+
+.dashboard-page {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.dashboard-page__intro {
+  margin-bottom: 22px;
+}
+
+.dashboard-page__title {
+  margin: 0;
+  font-size: clamp(1.35rem, 4vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.dashboard-page__lead {
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  max-width: 52ch;
+}
+
+.dashboard-page__card-hint {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.4;
+  max-width: 42ch;
+}
+
+.dash-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.dash-card__title-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+
+.dash-card__value--loading {
+  opacity: 0.45;
+  font-size: 1.5rem;
+}
+
+.saldo-resumo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.saldo-resumo__item {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg-surface-elevated) 88%, var(--layout-main-bg));
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+.saldo-resumo__label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.saldo-resumo__value {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.ia-hints {
+  margin: 14px 0 0;
+  padding-left: 1.15rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.chart-empty {
+  padding: 20px 16px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--layout-main-bg) 55%, transparent);
+  border-radius: 16px;
+  border: 1px dashed var(--border);
+}
+
+.category-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.category-bar-row__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.category-bar-row__name {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.category-bar-row__val {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--yellow-main);
+  flex-shrink: 0;
+}
+
+.category-bar-row__track {
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--border) 45%, transparent);
+  overflow: hidden;
+}
+
+.category-bar-row__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--yellow-deep), var(--yellow-main));
+  min-width: 4px;
+  transition: width 0.35s ease;
+}
+
+@media (max-width: 520px) {
+  .saldo-resumo {
+    grid-template-columns: 1fr;
+  }
+}

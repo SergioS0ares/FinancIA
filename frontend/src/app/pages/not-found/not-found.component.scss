@@ -6,8 +6,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff !important;
-  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--layout-main-bg) !important;
+  font-family: inherit;
   color: var(--text-primary);
 }
 
@@ -21,7 +21,11 @@
 
 .content.text-center {
   text-align: center;
-  background: #ffffff;
+  background: var(--bg-surface-elevated);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  padding: 24px 20px 32px;
 }
 
 /* Número 404 acima do “cara tomando choque” */
@@ -38,7 +42,7 @@
 
 /* Área da ilustração: mesmo fundo da página (sem branco) */
 .four_zero_four_bg {
-  background-color: #ffffff !important;
+  background-color: transparent !important;
   background-image: url('https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif');
   height: 400px;
   background-position: center;
@@ -47,7 +51,7 @@
 
 .contant_box_404 {
   margin-top: -50px;
-  background: #ffffff;
+  background: transparent;
 }
 
 /* Título e texto em marrom (igual login/cadastro) */
@@ -89,18 +93,21 @@
   display: inline-block;
   text-decoration: none;
   text-align: center;
-  padding: 12px 24px;
-  border: none;
-  border-radius: var(--radius);
-  background: var(--primary);
-  color: var(--text-primary);
-  font-weight: 600;
+  padding: 12px 28px;
+  border: 1px solid var(--btn-primary-outline);
+  border-radius: 999px;
+  background: var(--btn-primary-surface);
+  color: var(--btn-primary-on-surface);
+  font-weight: 700;
   font-family: inherit;
   cursor: pointer;
-  transition: background 0.2s;
+  transition:
+    background 0.2s,
+    transform 0.2s;
   margin: 20px 0;
 
   &:hover {
-    background: var(--primary-hover);
+    background: var(--btn-primary-surface-hover);
+    transform: translateY(-1px);
   }
 }

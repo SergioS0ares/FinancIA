@@ -1,34 +1,25 @@
-<app-default-login-layout>
-  <div class="flex justify-center mb-4 md:mb-5">
-    <img
-      src="assets/cerebro.png"
-      alt=""
-      class="h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_24px_rgba(240,192,48,0.45)]"
-      width="180"
-      height="180" />
-  </div>
-
-  <h2 class="text-xl md:text-2xl font-bold text-center text-gray-900 mb-2">
+<app-default-login-layout screenSubtitle="E-mail">
+  <h2 class="text-xl md:text-2xl font-bold text-center text-loginCardText mb-2">
     Verifique seu <span class="text-ouro">e-mail</span>
   </h2>
-  <p class="text-sm md:text-base text-center text-gray-600 leading-relaxed mb-6">
-    Enviamos um link para <span class="text-gray-900 font-semibold">{{ emailUsuario }}</span>. Abra a mensagem e confirme. Verifique também o spam.
+  <p class="text-sm md:text-base text-center text-loginCardMuted leading-relaxed mb-6">
+    Enviamos um link para <span class="text-loginCardText font-semibold">{{ emailUsuario }}</span>. Abra a mensagem e confirme. Verifique também o spam.
   </p>
 
-  <div class="hidden sm:flex justify-center gap-2 md:gap-3 mb-8 text-gray-500 text-xs md:text-sm">
+  <div class="hidden sm:flex justify-center gap-2 md:gap-3 mb-8 text-loginCardMuted text-xs md:text-sm">
     <span class="flex items-center gap-1 text-ouro"><mat-icon class="!text-base">person_add</mat-icon> Cadastro</span>
-    <span class="text-gray-300">—</span>
-    <span class="flex items-center gap-1 font-semibold text-gray-800"
-      ><mat-icon class="!text-base text-ciano">mail</mat-icon> Verificação</span
+    <span class="opacity-40">—</span>
+    <span class="flex items-center gap-1 font-semibold text-loginCardText"
+      ><mat-icon class="!text-base text-ouro">mail</mat-icon> Verificação</span
     >
-    <span class="text-gray-300">—</span>
+    <span class="opacity-40">—</span>
     <span class="flex items-center gap-1"><mat-icon class="!text-base">check_circle</mat-icon> Ativação</span>
   </div>
 
   <div class="flex flex-col gap-3 mb-6">
     <button
       type="button"
-      class="w-full min-h-12 rounded-xl bg-ouro text-white font-bold shadow-lg transition hover:brightness-105 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
+      class="w-full min-h-12 rounded-full bg-ouro text-white font-bold shadow-lg transition hover:brightness-105 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2 uppercase tracking-wide"
       [disabled]="reenviarDisabilitado || isLoading"
       (click)="reenviarEmail()">
       @if (!reenviarDisabilitado && !isLoading) {
@@ -44,18 +35,18 @@
 
     <button
       type="button"
-      class="w-full min-h-12 rounded-xl border border-gray-200 bg-white text-gray-800 font-medium flex items-center justify-center gap-2 hover:border-ciano/50 transition-colors"
+      class="w-full min-h-12 rounded-xl border border-loginCardBorder bg-loginCard text-loginCardText font-medium flex items-center justify-center gap-2 hover:border-ouro/50 transition-colors"
       (click)="irParaConfirmacao()">
       <mat-icon class="!text-xl text-ouro">key</mat-icon>
       <span>Já tenho o código</span>
     </button>
   </div>
 
-  <div class="rounded-xl border border-ciano/25 bg-cianoLight p-4 mb-6">
-    <p class="text-gray-600 text-sm flex items-start gap-2 !m-0">
+  <div class="rounded-xl border border-ouro/25 bg-ouro/10 p-4 mb-6">
+    <p class="text-loginCardMuted text-sm flex items-start gap-2 !m-0">
       <mat-icon class="!text-lg shrink-0 text-ouro">help</mat-icon>
       <span>
-        <strong class="text-gray-900">Não recebeu?</strong> Confira spam, aguarde alguns minutos ou toque em reenviar.
+        <strong class="text-loginCardText">Não recebeu?</strong> Confira spam, aguarde alguns minutos ou toque em reenviar.
       </span>
     </p>
   </div>

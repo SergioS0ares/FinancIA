@@ -1,0 +1,129 @@
+.ia-hub {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.ia-hub__hero {
+  margin-bottom: 28px;
+}
+
+.ia-hub__eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--yellow-main);
+}
+
+.ia-hub__title {
+  margin: 0;
+  font-size: clamp(1.45rem, 4vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.ia-hub__lead {
+  margin: 12px 0 0;
+  max-width: 62ch;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.ia-hub__grid {
+  display: grid;
+  gap: 20px;
+
+  @media (min-width: 900px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  @media (min-width: 600px) and (max-width: 899px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.ia-hub__card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 22px 20px 20px;
+}
+
+.ia-hub__card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  background: color-mix(in srgb, var(--yellow-main) 18%, transparent);
+  color: var(--yellow-deep);
+
+  mat-icon {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+  }
+}
+
+.ia-hub__card-title {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.ia-hub__card-body {
+  margin: 0 0 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.ia-hub__bullets {
+  margin: 0 0 18px;
+  padding-left: 1.15rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.ia-hub__cta {
+  align-self: flex-start;
+  margin-top: auto;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.72rem !important;
+  --mdc-filled-button-container-color: var(--yellow-main) !important;
+  --mdc-filled-button-label-text-color: #fff !important;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.ia-hub__footnote {
+  margin: 28px 0 0;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px dashed var(--border);
+  background: color-mix(in srgb, var(--layout-main-bg) 50%, transparent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}

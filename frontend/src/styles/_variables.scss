@@ -1,122 +1,145 @@
 // Tema global: modo claro / escuro (variáveis semânticas + legado para componentes)
 :root {
-  // Modo claro — bege quente (referência UI)
-  --color-background: #f4f1e8;
-  --color-text-primary: #1c1917;
-  --color-text-secondary: #57534e;
-  --color-border-base: #d6d3cd;
+  // Modo claro — mostarda (telas de acesso + layout principal alinhado ao login)
+  --color-background: #f3ebd4;
+  --color-text-primary: #2c3a3a;
+  --color-text-secondary: #5c6d6d;
+  --color-border-base: #d4c9a8;
 
-  // Cartão de acesso (login) — bege cartão + contorno escuro
-  --color-login-card-bg: #efede0;
-  --color-login-card-border: #0f0f0f;
-  --color-login-card-text: #111827;
-  --color-login-card-muted: #57534e;
-  --color-login-card-shadow: 0 20px 50px rgba(28, 25, 23, 0.12);
-  --login-static-bg-image: url('/assets/login-static-bg-light.svg');
+  // Fundo dedicado das telas de login/cadastro (mostarda)
+  --auth-page-bg: #dcc54d;
+  --auth-pattern-fg: rgba(60, 74, 74, 0.06);
+
+  // Cartão de acesso — branco, borda suave; campos com contorno dourado
+  --color-login-card-bg: #ffffff;
+  --color-login-card-border: rgba(198, 150, 52, 0.35);
+  --color-login-card-text: #2c3a3a;
+  --color-login-card-muted: #6b7a7a;
+  --color-login-card-shadow: 0 24px 56px rgba(44, 58, 58, 0.14);
+  --login-static-bg-image: none;
 
   // Compatibilidade (Material, botões, inputs)
-  --color-access-shell: #121d28;
+  --color-access-shell: #3d5252;
   --color-access-card: var(--color-login-card-bg);
   --color-access-card-text: var(--color-login-card-text);
   --color-access-card-muted: var(--color-login-card-muted);
-  --color-bg-card: var(--color-login-card-bg);
+  --color-bg-card: #ffffff;
 
-  // Campos dentro do cartão (recessed)
-  --login-field-bg: #faf8f3;
-  --login-field-border: #c8c4b8;
+  --login-field-bg: #fafaf8;
+  --login-field-border: rgba(198, 150, 52, 0.65);
 
-  --yellow-main: #f2b705;
-  --yellow-soft: #fde68a;
-  --yellow-deep: #d97706;
-  --brown-main: #3b221b;
-  --brown-soft: #5b372c;
+  --yellow-main: #c69634;
+  --yellow-soft: #e8d5a8;
+  --yellow-deep: #a67c28;
+  --brown-main: #3d5252;
+  --brown-soft: #5a6f6f;
+
+  // Shell principal — lateral branca no modo claro (contraste com moldura mostarda)
+  --layout-sidebar-bg: #ffffff;
+  --layout-sidebar-text: #2c3a3a;
+  --layout-sidebar-muted: rgba(44, 58, 58, 0.55);
+  --layout-main-bg: #dcc54d;
+  --layout-blob-gold: rgba(198, 150, 52, 0.22);
+  --layout-blob-cool: rgba(140, 180, 190, 0.18);
 
   --bg-page: var(--color-background);
-  --bg-page-alt: #ebe8df;
+  --bg-page-alt: #e8dfc8;
   --bg-surface: var(--color-bg-card);
-  --bg-surface-elevated: #f5f2ea;
+  --bg-surface-elevated: #ffffff;
 
-  --bg-gradient-start: rgba(242, 183, 5, 0.12);
-  --bg-gradient-end: rgba(59, 34, 27, 0.05);
+  --bg-gradient-start: rgba(198, 150, 52, 0.12);
+  --bg-gradient-end: rgba(61, 82, 82, 0.06);
 
   --text-primary: var(--color-text-primary);
   --text-secondary: var(--color-text-secondary);
-  --text-muted: #78716c;
+  --text-muted: #7a8a8a;
 
   --border: var(--color-border-base);
   --radius: 12px;
   --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius-xl: 32px;
 
-  --shadow-sm: 0 1px 3px rgba(31, 21, 18, 0.06);
-  --shadow-md: 0 12px 36px rgba(31, 21, 18, 0.1);
+  --shadow-sm: 0 1px 3px rgba(44, 58, 58, 0.06);
+  --shadow-md: 0 16px 40px rgba(44, 58, 58, 0.1);
 
   --primary: var(--yellow-main);
-  --primary-hover: #ffc94d;
+  --primary-hover: #d4a84a;
   --accent: var(--yellow-deep);
   --accent-hover: var(--yellow-main);
   --danger: #dc2626;
 
-  --btn-primary-surface: #ffffff;
-  --btn-primary-surface-hover: #f3f1ee;
-  --btn-primary-on-surface: #1c1410;
-  --btn-primary-outline: #c8c2bc;
-  --btn-primary-shadow: rgba(28, 20, 16, 0.08);
+  // Botão principal — ouro + texto branco (login / ações)
+  --btn-primary-surface: #c69634;
+  --btn-primary-surface-hover: #d4a84a;
+  --btn-primary-on-surface: #ffffff;
+  --btn-primary-outline: rgba(198, 150, 52, 0.45);
+  --btn-primary-shadow: rgba(198, 150, 52, 0.35);
 
   --input-bg: var(--login-field-bg);
   --input-border: var(--login-field-border);
-  --input-focus-ring: rgba(242, 183, 5, 0.45);
+  --input-focus-ring: rgba(198, 150, 52, 0.4);
 }
 
 .dark,
 .theme-dark {
   color-scheme: dark;
 
-  // Modo escuro — charcoal / navy premium (referência)
-  --color-background: #12141d;
-  --color-text-primary: #f3f4f6;
-  --color-text-secondary: #d1d5db;
-  --color-border-base: #3f3f46;
+  // Modo escuro — charcoal suave (menos “preto chapado”) + texto bem legível
+  --color-background: #252d2d;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #e4eaea;
+  --color-border-base: #3d4848;
 
-  --color-login-card-bg: rgba(30, 32, 40, 0.92);
-  --color-login-card-border: #000000;
-  --color-login-card-text: #f9fafb;
-  --color-login-card-muted: #a1a1aa;
-  --color-login-card-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 40px rgba(212, 140, 0, 0.08);
-  --login-static-bg-image: url('/assets/login-static-bg-dark.svg');
+  --auth-page-bg: #2a3232;
+  --auth-pattern-fg: rgba(255, 255, 255, 0.04);
 
-  --color-bg-card: #1e2229;
+  --color-login-card-bg: #323a3a;
+  --color-login-card-border: rgba(198, 150, 52, 0.4);
+  --color-login-card-text: #ffffff;
+  --color-login-card-muted: #c4d0d0;
+  --color-login-card-shadow: 0 28px 64px rgba(0, 0, 0, 0.5), 0 0 48px rgba(198, 150, 52, 0.06);
+  --login-static-bg-image: none;
+
+  --color-bg-card: #2f3838;
+
+  /* Lateral alinhada aos painéis (sem gradiente “bronze” claro) */
+  --layout-sidebar-bg: #343d3d;
+  --layout-sidebar-text: #ffffff;
+  --layout-sidebar-muted: rgba(255, 255, 255, 0.62);
+  --layout-main-bg: #1e2525;
+  --layout-blob-gold: rgba(198, 150, 52, 0.12);
+  --layout-blob-cool: rgba(120, 160, 170, 0.08);
 
   --bg-page: var(--color-background);
-  --bg-page-alt: #181b22;
+  --bg-page-alt: #2a3232;
   --bg-surface: var(--color-bg-card);
-  --bg-surface-elevated: #2a2f3a;
+  --bg-surface-elevated: #3a4444;
 
-  --bg-gradient-start: rgba(212, 140, 0, 0.08);
-  --bg-gradient-end: rgba(0, 0, 0, 0.45);
+  --bg-gradient-start: rgba(198, 150, 52, 0.1);
+  --bg-gradient-end: rgba(0, 0, 0, 0.35);
 
   --text-primary: var(--color-text-primary);
   --text-secondary: var(--color-text-secondary);
-  --text-muted: #9ca3af;
+  --text-muted: #b4c0c0;
 
   --border: var(--color-border-base);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 20px 48px rgba(0, 0, 0, 0.45);
 
-  --primary: #fbbf24;
-  --primary-hover: #fcd34d;
-  --accent: #f59e0b;
-  --accent-hover: #fbbf24;
+  --primary: #d4a84a;
+  --primary-hover: #e0bc6a;
+  --accent: #c69634;
+  --accent-hover: #d4a84a;
   --danger: #ef5350;
 
-  --btn-primary-surface: #f2b705;
-  --btn-primary-surface-hover: #fbbf24;
-  --btn-primary-on-surface: #1c1410;
-  --btn-primary-outline: rgba(251, 191, 36, 0.55);
-  --btn-primary-shadow: rgba(212, 140, 0, 0.35);
+  --btn-primary-surface: #c69634;
+  --btn-primary-surface-hover: #d4a84a;
+  --btn-primary-on-surface: #ffffff;
+  --btn-primary-outline: rgba(212, 168, 74, 0.5);
+  --btn-primary-shadow: rgba(198, 150, 52, 0.35);
 
-  --login-field-bg: #1a1c23;
-  --login-field-border: #3f3f46;
+  --login-field-bg: #262c2c;
+  --login-field-border: rgba(212, 168, 74, 0.45);
 
   --color-access-card: var(--color-login-card-bg);
   --color-access-card-text: var(--color-login-card-text);
@@ -124,7 +147,7 @@
 
   --input-bg: var(--login-field-bg);
   --input-border: var(--login-field-border);
-  --input-focus-ring: rgba(251, 191, 36, 0.4);
+  --input-focus-ring: rgba(212, 168, 74, 0.35);
 }
 
 html {
@@ -134,8 +157,9 @@ html {
 app-root {
   position: relative;
   z-index: 1;
-  min-height: 100vh;
   display: block;
+  min-height: 100dvh;
+  min-height: 100vh;
 }
 
 input,

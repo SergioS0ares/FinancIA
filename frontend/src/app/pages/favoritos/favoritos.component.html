@@ -1,0 +1,38 @@
+<div class="app-page-head">
+  <h1 class="app-page-head__title">Favoritos e atalhos</h1>
+  <p class="app-page-head__sub">Acesso rápido ao que você mais usa — categorias fixadas e ferramentas em um clique</p>
+</div>
+
+<div class="fav-grid max-w-[1120px] mx-auto w-full">
+  <section class="dash-card fav-card">
+    <mat-icon class="fav-card__icon text-ouro">star</mat-icon>
+    <h2 class="fav-card__title">Categorias favoritas</h2>
+    <p class="app-placeholder-hint">
+      Em breve você poderá fixar categorias (ex.: Mercado, Transporte) para lançar transações mais rápido e ver resumos dedicados.
+    </p>
+    <p class="fav-card__empty">Nenhuma categoria favoritada ainda.</p>
+  </section>
+
+  <section class="dash-card fav-card">
+    <mat-icon class="fav-card__icon text-ouro">bolt</mat-icon>
+    <h2 class="fav-card__title">Atalhos</h2>
+    <div class="fav-links">
+      <a mat-stroked-button routerLink="/app/planejamento-ia" class="fav-link fav-link--highlight">
+        <mat-icon>rocket_launch</mat-icon>
+        IA e planejamento (visão geral)
+      </a>
+      <a mat-stroked-button routerLink="/app/importar-extratos" class="fav-link">
+        <mat-icon>upload_file</mat-icon>
+        Importar extratos
+      </a>
+      <a mat-stroked-button routerLink="/app/simulador" class="fav-link">
+        <mat-icon>savings</mat-icon>
+        Simulador de metas
+      </a>
+      <a mat-stroked-button routerLink="/app/chat" class="fav-link">
+        <mat-icon>chat</mat-icon>
+        Assistente financeiro
+      </a>
+    </div>
+  </section>
+</div>

@@ -1,2 +1,39 @@
-/* Mantém estilo simples; o visual principal vem do tema/tailwind. */
+.nova-tx__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
 
+.nova-tx__subtitle {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.nova-tx__content {
+  padding-top: 8px !important;
+  max-height: min(70vh, 520px);
+}
+
+.nova-tx__form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nova-tx__prefix {
+  padding-right: 4px;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.nova-tx__actions {
+  padding: 8px 16px 16px !important;
+  flex-wrap: wrap;
+  gap: 8px;
+}

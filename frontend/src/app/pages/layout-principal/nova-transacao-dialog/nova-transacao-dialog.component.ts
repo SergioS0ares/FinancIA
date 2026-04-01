@@ -38,10 +38,21 @@ export class NovaTransacaoDialogComponent {
     this.form = this.fb.group({
       tipo: ['despesa', Validators.required],
       valor: ['', [Validators.required, Validators.min(0.01)]],
-      descricao: ['', Validators.required],
-      categoria: [''],
-      data: [new Date().toISOString()],
+      descricao: ['', [Validators.required, Validators.maxLength(200)]],
+      categoria: ['', Validators.maxLength(80)],
+      dataLocal: [NovaTransacaoDialogComponent.toDatetimeLocalValue(new Date()), Validators.required],
     });
+  }
+
+  /** Valor para input type="datetime-local" (fuso local). */
+  private static toDatetimeLocalValue(d: Date): string {
+    const offsetMs = d.getTimezoneOffset() * 60_000;
+    const local = new Date(d.getTime() - offsetMs);
+    return local.toISOString().slice(0, 16);
+  }
+
+  private static fromDatetimeLocalValue(s: string): string {
+    return new Date(s).toISOString();
   }
 
   salvar(): void {
@@ -50,13 +61,12 @@ export class NovaTransacaoDialogComponent {
     this.loading = true;
     const raw = this.form.value;
 
-    // Garantir tipos corretos pro backend.
     const payload: Transacao = {
       tipo: raw.tipo,
       valor: Number(raw.valor),
-      descricao: raw.descricao,
-      categoria: raw.categoria || undefined,
-      data: raw.data,
+      descricao: raw.descricao?.trim(),
+      categoria: raw.categoria?.trim() || undefined,
+      data: NovaTransacaoDialogComponent.fromDatetimeLocalValue(raw.dataLocal),
     };
 
     this.transactionService.criarTransacao(payload).subscribe({
@@ -71,4 +81,3 @@ export class NovaTransacaoDialogComponent {
     });
   }
 }
-

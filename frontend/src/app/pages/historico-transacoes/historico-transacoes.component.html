@@ -1,0 +1,91 @@
+<div class="historico-page">
+  <header class="historico-page__head">
+    <div class="historico-page__head-text">
+      <p class="historico-page__badge">Módulo 1 · Gestão de transações</p>
+      <h1 class="app-page-head__title m-0">Histórico completo</h1>
+      <p class="app-page-head__sub m-0 mt-1">
+        Todas as movimentações cadastradas. Filtre por tipo, período ou categoria. O mesmo fluxo do painel: ícone de relógio no menu lateral.
+      </p>
+    </div>
+    <button mat-flat-button type="button" class="dash-action-btn historico-page__cta" (click)="abrirNovaTransacao()">
+      <mat-icon>add</mat-icon>
+      Nova transação
+    </button>
+  </header>
+
+  <section class="dash-card historico-filtros max-w-[1120px] mx-auto w-full mb-5">
+    <div class="dash-card__title mb-1">Filtros</div>
+    <p class="historico-page__filtros-hint">Refine a lista sem alterar os dados no servidor.</p>
+    <div class="historico-filtros__grid">
+      <mat-form-field appearance="outline" class="historico-field">
+        <mat-label>Tipo</mat-label>
+        <mat-select [(ngModel)]="filtroTipo" name="tipo">
+          <mat-option value="todos">Todos</mat-option>
+          <mat-option value="receita">Receita</mat-option>
+          <mat-option value="despesa">Despesa</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="historico-field">
+        <mat-label>Data inicial</mat-label>
+        <input matInput type="date" [(ngModel)]="dataInicio" name="ini" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="historico-field">
+        <mat-label>Data final</mat-label>
+        <input matInput type="date" [(ngModel)]="dataFim" name="fim" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="historico-field historico-field--categoria">
+        <mat-label>Categoria</mat-label>
+        <input matInput type="text" [(ngModel)]="filtroCategoria" name="categoria" placeholder="Ex.: Moradia, Transporte" />
+        <mat-hint>Contém o texto (não precisa ser exato)</mat-hint>
+      </mat-form-field>
+
+      <div class="historico-filtros__actions">
+        <button mat-stroked-button type="button" (click)="limparFiltros()">
+          <mat-icon>filter_alt_off</mat-icon>
+          Limpar filtros
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="dash-card max-w-[1120px] mx-auto w-full">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div class="dash-card__title !mb-0">Resultados ({{ filtradas.length }})</div>
+      <button mat-icon-button type="button" (click)="carregar()" [disabled]="carregando" aria-label="Atualizar lista">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="carregando" class="py-8 text-center text-textSecondary font-bold">Carregando…</div>
+
+    <div *ngIf="!carregando && filtradas.length === 0" class="py-8 text-center text-textSecondary font-bold">
+      Nenhuma transação encontrada com estes filtros.
+    </div>
+
+    <div *ngIf="!carregando && filtradas.length > 0" class="transactions-list">
+      <div *ngFor="let t of filtradas" class="transaction-row">
+        <div class="transaction-left">
+          <div class="transaction-main">
+            {{ t.descricao || t.categoria || 'Sem descrição' }}
+          </div>
+          <div class="transaction-sub">
+            <span>{{ t.categoria || 'Geral' }}</span>
+            <span *ngIf="t.data" class="opacity-70">• {{ t.data | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+
+        <div class="transaction-right">
+          <div class="transaction-type" [ngClass]="t.tipo === 'receita' ? 'text-emerald-500' : 'text-rose-500'">
+            {{ t.tipo === 'receita' ? 'Receita' : 'Despesa' }}
+          </div>
+          <div class="transaction-value" [ngClass]="t.tipo === 'receita' ? 'text-emerald-500' : 'text-rose-500'">
+            {{ t.valor | currency:'BRL' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

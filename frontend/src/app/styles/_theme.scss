@@ -79,9 +79,9 @@ button.btn-primary-page {
   box-sizing: border-box !important;
 
   &:hover {
-    background: rgba(246, 189, 56, 0.1) !important;
+    background: rgba(198, 150, 52, 0.12) !important;
     border-color: var(--yellow-main) !important;
-    box-shadow: 0 4px 14px rgba(246, 189, 56, 0.25) !important;
+    box-shadow: 0 4px 14px rgba(198, 150, 52, 0.28) !important;
   }
 
   .google-icon,
@@ -150,9 +150,9 @@ button.btn-primary-page {
   transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 
   &:hover {
-    background: rgba(246, 189, 56, 0.12);
+    background: rgba(198, 150, 52, 0.12);
     border-color: var(--yellow-main);
-    box-shadow: 0 4px 14px rgba(246, 189, 56, 0.25);
+    box-shadow: 0 4px 14px rgba(198, 150, 52, 0.28);
   }
 }
 

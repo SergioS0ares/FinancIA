@@ -16,6 +16,8 @@ const DARK_MODE_KEY = 'darkMode';
 })
 export class DefaultLoginLayoutComponent implements OnInit {
   @Input() title = '';
+  /** Ex.: "Login", "Cadastro" — linha "FinanciA — …" abaixo da marca */
+  @Input() screenSubtitle = '';
   @Input() primaryBtnText = '';
   @Input() secondaryBtnText = '';
   @Input() disablePrimaryBtn = false;

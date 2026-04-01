@@ -4,6 +4,9 @@ module.exports = {
   content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', 'Roboto', 'system-ui', 'sans-serif'],
+      },
       colors: {
         // Cores semânticas que mudam dinamicamente
         background: 'var(--color-background)', // Fundo global da tela (Dark Navy ou Light Gray)
@@ -12,8 +15,8 @@ module.exports = {
         borderBase: 'var(--color-border-base)',
 
         // Cores fixas da marca (iguais em ambos os modos)
-        ouro: '#f2b705',
-        ouroGlow: 'rgba(242, 183, 5, 0.45)',
+        ouro: '#c69634',
+        ouroGlow: 'rgba(198, 150, 52, 0.45)',
         ciano: '#30f0f0',
         cianoLight: 'rgba(48, 240, 240, 0.1)',
 

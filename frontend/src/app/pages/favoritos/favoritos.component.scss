@@ -1,0 +1,61 @@
+:host {
+  display: block;
+}
+
+.fav-grid {
+  display: grid;
+  gap: 18px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.fav-card__icon {
+  font-size: 36px;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 12px;
+}
+
+.fav-card__title {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.fav-card__empty {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.fav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fav-link {
+  justify-content: flex-start !important;
+  border-radius: 14px !important;
+  font-weight: 600 !important;
+  border-color: var(--border) !important;
+  color: var(--text-primary) !important;
+
+  mat-icon {
+    margin-right: 10px;
+    color: var(--yellow-main);
+  }
+
+  &:hover {
+    border-color: var(--yellow-main) !important;
+  }
+}
+
+.fav-link--highlight {
+  border-color: color-mix(in srgb, var(--yellow-main) 45%, var(--border)) !important;
+  background: color-mix(in srgb, var(--yellow-main) 8%, transparent);
+}

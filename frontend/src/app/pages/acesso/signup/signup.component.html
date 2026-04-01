@@ -1,4 +1,4 @@
-<app-default-login-layout>
+<app-default-login-layout screenSubtitle="Cadastro">
   <div class="card-inner page-card signup-in-shell">
     <div class="signup-header">
       <p class="signup-phrase">É rápido e fácil. Comece agora.</p>
@@ -40,7 +40,13 @@
         <mat-error *ngIf="signupForm.get('passwordConfirm')?.hasError('passwordMismatch')">Senhas não conferem</mat-error>
       </mat-form-field>
       <p class="recaptcha-note">Proteção contra robôs pode ser reativada configurando ng-recaptcha.</p>
-      <button mat-raised-button type="submit" class="btn-primary-page full-width" [disabled]="signupForm.invalid">Cadastrar</button>
+      <button
+        mat-raised-button
+        type="submit"
+        class="btn-primary-page full-width !rounded-full !uppercase !tracking-wide"
+        [disabled]="signupForm.invalid">
+        Cadastrar
+      </button>
       <div class="divider" role="separator">Ou entre com:</div>
       <div class="socials access-socials flex flex-col gap-3">
         <div #googleButton class="google-signin-host w-full flex justify-center min-h-[44px]" aria-label="Cadastrar com Google"></div>

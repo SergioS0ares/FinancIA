@@ -42,3 +42,52 @@ $financia-theme: mat.m2-define-light-theme(
 .mat-mdc-input-element {
   color: var(--color-text-primary) !important;
 }
+
+/* -------------------------------------------------------------------------- */
+/* Diálogos Material — cantos arredondados + cores do tema claro/escuro       */
+/* (overlay no body; variáveis herdam de :root / .dark no <html>)             */
+/* -------------------------------------------------------------------------- */
+:root {
+  --mat-dialog-container-shape: var(--radius-lg);
+  --mat-dialog-container-color: var(--bg-surface-elevated);
+  --mat-dialog-subhead-color: var(--text-primary);
+  --mat-dialog-supporting-text-color: var(--text-secondary);
+  --mat-dialog-container-elevation-shadow: var(--shadow-md);
+}
+
+.mat-mdc-dialog-surface.mdc-dialog__surface {
+  border: 1px solid color-mix(in srgb, var(--yellow-main) 16%, var(--border));
+  overflow: hidden;
+}
+
+.mat-mdc-dialog-container .mat-mdc-dialog-actions {
+  border-top-color: var(--border) !important;
+  background-color: color-mix(in srgb, var(--bg-surface-elevated) 96%, var(--border));
+}
+
+.dark .mat-mdc-dialog-container .mat-mdc-dialog-actions,
+.theme-dark .mat-mdc-dialog-container .mat-mdc-dialog-actions {
+  background-color: color-mix(in srgb, var(--bg-surface-elevated) 92%, transparent);
+}
+
+/* Campos dentro do diálogo */
+.mat-mdc-dialog-container .mat-mdc-text-field-wrapper {
+  background-color: var(--input-bg) !important;
+}
+
+.mat-mdc-dialog-container .mdc-notched-outline__leading,
+.mat-mdc-dialog-container .mdc-notched-outline__notch,
+.mat-mdc-dialog-container .mdc-notched-outline__trailing {
+  border-color: var(--input-border) !important;
+}
+
+.mat-mdc-dialog-container .mat-mdc-input-element,
+.mat-mdc-dialog-container .mdc-floating-label,
+.mat-mdc-dialog-container .mat-mdc-floating-label {
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-dialog-container .mat-mdc-form-field-icon-prefix .mat-icon,
+.mat-mdc-dialog-container .mat-mdc-form-field-icon-suffix .mat-icon {
+  color: var(--text-muted) !important;
+}

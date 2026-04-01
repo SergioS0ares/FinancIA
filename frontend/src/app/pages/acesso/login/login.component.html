@@ -1,4 +1,4 @@
-<app-default-login-layout>
+<app-default-login-layout screenSubtitle="Login">
   <p class="text-center text-sm text-loginCardMuted mb-6 sm:mb-7">Entre com seu e-mail e senha</p>
 
   <form [formGroup]="loginForm" (ngSubmit)="realizarLogin()" class="login-form access-login-form flex flex-col gap-1">
@@ -50,7 +50,7 @@
     <button
       type="submit"
       mat-flat-button
-      class="!w-full !min-h-[52px] !rounded-xl !bg-ouro !text-stone-900 !font-bold !text-base !shadow-[0_4px_24px_rgba(242,183,5,0.45)] hover:!brightness-110"
+      class="login-submit-btn !w-full !min-h-[52px] !rounded-full !bg-ouro !text-white !font-bold !text-base !tracking-wide !uppercase !shadow-[0_6px_28px_rgba(198,150,52,0.45)] hover:!brightness-110"
       [disabled]="!loginForm.valid">
       Entrar
     </button>
